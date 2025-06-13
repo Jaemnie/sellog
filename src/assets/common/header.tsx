@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import ChatList from "../chat/chatList";
 interface HeaderProps {
   title?: string;
 }
@@ -10,8 +9,17 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const home = () => {
+    navigate("/home");
+  };
+  const friendList = () => {
+    navigate("/friendList");
+  };
   const chatClick = () => {
     navigate("/chatList");
+  };
+  const login = () => {
+    navigate("/login");
   };
   const headerStyles = {
     backgroundColor: "var(--color-background)",
@@ -38,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* SL 로고 */}
-          <div className="flex-shrink-0">
+          <div onClick={home} className="flex-shrink-0 ">
             <h1
               className="text-xl sm:text-2xl font-bold"
               style={{ color: "var(--color-primary)" }}
@@ -50,6 +58,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
           {/* 데스크톱 네비게이션 */}
           <nav className="hidden md:flex items-center space-x-4">
             <button
+              onClick={friendList}
               className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:text-primary"
               style={linkStyles}
             >
@@ -62,7 +71,9 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             >
               채팅
             </button>
-            <button className="btn btn-primary text-sm">로그인</button>
+            <button onClick={login} className="btn btn-primary text-sm">
+              로그인
+            </button>
           </nav>
 
           {/* 모바일 메뉴 버튼 */}

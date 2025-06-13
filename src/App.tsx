@@ -2,8 +2,10 @@ import { Header } from "./assets/common";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
-import Test from "./assets/test/test";
-import ChatList from "./assets/chat/chatList";
+import Home from "./pages/home/homePage";
+import FriendList from "./pages/social/friendList";
+import ChatList from "./pages/chat/chatList";
+import Login from "./pages/auth/login";
 function App() {
   return (
     <div
@@ -16,8 +18,10 @@ function App() {
         {/* 헤더가 fixed이므로 padding-top 추가 */}
 
         <Routes>
-          <Route path="/test" element={<Test />}></Route>
+          <Route path="/home" element={<Home />}></Route>
+          <Route path="/friendList" element={<FriendList />}></Route>
           <Route path="/chatList" element={<ChatList />}></Route>
+          <Route path="/login" element={<Login />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
