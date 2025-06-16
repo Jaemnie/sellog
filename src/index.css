@@ -243,7 +243,20 @@ a:hover {
   box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
-
+.card-position {
+  position: fixed;
+  width: 400px;
+  height: 300px;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.card-logo {
+  padding: 10px;
+  font-size: 4.5rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
 /* 입력 필드 스타일 */
 .input {
   width: 100%;

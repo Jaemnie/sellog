@@ -6,6 +6,10 @@ import Home from "./pages/home/homePage";
 import FriendList from "./pages/social/friendList";
 import ChatList from "./pages/chat/chatList";
 import Login from "./pages/auth/login";
+import Join from "./pages/auth/singUp";
+import FindId from "./pages/auth/findId";
+import ForgotPw from "./pages/auth/forgotPw";
+
 function App() {
   return (
     <div
@@ -22,6 +26,9 @@ function App() {
           <Route path="/friendList" element={<FriendList />}></Route>
           <Route path="/chatList" element={<ChatList />}></Route>
           <Route path="/login" element={<Login />}></Route>
+          <Route path="/join" element={<Join />}></Route>
+          <Route path="/findId" element={<FindId />}></Route>
+          <Route path="/forgotPw" element={<ForgotPw />}></Route>
         </Routes>
       </BrowserRouter>
     </div>
