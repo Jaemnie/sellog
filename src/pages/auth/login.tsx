@@ -3,17 +3,20 @@ import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 interface LoginProps {
   title?: string;
 }
-const findStyles = {
-  color: "var(--color-text-secondary)",
-};
 
 const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
+  
+  // 입력 상태 관리
+  const [userId, setUserId] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  
   /*url 경로*/
   const join = () => {
     navigate("/join");
@@ -24,48 +27,95 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
   const forgotPw = () => {
     navigate("/forgotPw");
   };
-  /*Toast 문구*/
-  const notifyId = () => toast.error("아이디를 입력해주세요.");
-  const autoClose = 1000;
+  
+  /*Toast 메시지들*/
+  const notifyEmptyId = () => {
+    toast.error("아이디를 입력해주세요.", {
+      toastId: "login-id-error",
+      autoClose: 2000,
+    });
+  };
+  
+  const notifyEmptyPassword = () => {
+    toast.error("비밀번호를 입력해주세요.", {
+      toastId: "login-password-error",
+      autoClose: 2000,
+    });
+  };
+  
+  const notifyLoginSuccess = () => {
+    toast.success("로그인 성공!", {
+      toastId: "login-success",
+      autoClose: 1500,
+    });
+  };
+  
+  // 로그인 처리
+  const handleLogin = () => {
+    // 아이디 체크
+    if (!userId.trim()) {
+      notifyEmptyId();
+      return;
+    }
+    
+    // 비밀번호 체크
+    if (!password.trim()) {
+      notifyEmptyPassword();
+      return;
+    }
+    
+    // 실제 로그인 로직 (여기서는 성공 토스트만)
+    notifyLoginSuccess();
+    // TODO: 실제 로그인 API 호출
+  };
 
-  /* 비밀번호 표시 */
-  const [showPassword, setShowPassword] = useState(false);
   return (
     <div className="card-position">
       <div className="card-logo">SelLog</div>
       <div className="card">
-        <input className="input mb-2" type="text" placeholder="아이디" />
+                <input
+          className="auth-input"
+          type="text"
+          placeholder="아이디"
+          value={userId}
+          onChange={(e) => setUserId(e.target.value)}
+          onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+        />
         <div className="relative">
           <input
-            className="input mb-2"
+            className="auth-input"
             type={showPassword ? "text" : "password"}
             placeholder="비밀번호"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
           />
           <button
             className="btn-pw"
             onClick={() => setShowPassword((prev) => !prev)}
+            type="button"
           >
             <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
           </button>
         </div>
-        <ToastContainer limit={1} position="bottom-right" />
-        <button className="btn-login btn" onClick={notifyId}>
+
+        <button className="btn-login btn" onClick={handleLogin}>
           로그인
         </button>
         <button className="btn-login btn" onClick={join}>
           회원가입
         </button>
-        <div className="flex w-full ">
+        <div className="flex w-full justify-between">
           <div
-            className="flex w-5/6 text-sm"
-            style={findStyles}
+            className="auth-text-link cursor-pointer"
+            style={{ userSelect: "none" }}
             onClick={forgotPw}
           >
             비밀번호 변경
           </div>
           <div
-            className="flex justify-end w-full text-sm"
-            style={findStyles}
+            className="auth-text-link cursor-pointer"
+            style={{ userSelect: "none" }}
             onClick={findId}
           >
             아이디 찾기

@@ -1,29 +1,27 @@
 @import "tailwindcss";
-
-/* 프리텐다드 폰트 import */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+@import "react-toastify/dist/ReactToastify.css";
 
 /* CSS 변수 정의 - 라이트모드 */
 :root {
-  /* 컬러 시스템 */
-  --color-primary: #efda0d;
-  --color-primary-hover: #d9c40c;
-  --color-primary-light: #f5e84a;
+  /* 컬러 시스템 - 더 부드러운 노란색 톤 */
+  --color-primary: #f59e0b;
+  --color-primary-hover: #d97706;
+  --color-primary-light: #fbbf24;
 
-  /* 배경색 */
-  --color-background: #ffffff;
-  --color-background-secondary: #f8fafc;
-  --color-background-tertiary: #f1f5f9;
+  /* 배경색 - 더 부드러운 크림/오프화이트 톤 */
+  --color-background: #fefcf3;
+  --color-background-secondary: #f9f7f4;
+  --color-background-tertiary: #f5f3f0;
 
   /* 텍스트 색상 - 라이트모드 (어두운 텍스트) */
-  --color-text-primary: #0f172a;
-  --color-text-secondary: #334155;
-  --color-text-tertiary: #475569;
-  --color-text-muted: #64748b;
+  --color-text-primary: #1f2937;
+  --color-text-secondary: #374151;
+  --color-text-tertiary: #4b5563;
+  --color-text-muted: #6b7280;
 
   /* 보더 색상 */
-  --color-border: #e2e8f0;
-  --color-border-secondary: #cbd5e1;
+  --color-border: #e5e7eb;
+  --color-border-secondary: #d1d5db;
 
   /* 그림자 */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -40,20 +38,25 @@
 /* 다크모드 변수 */
 @media (prefers-color-scheme: dark) {
   :root {
-    /* 배경색 */
-    --color-background: #0f172a;
-    --color-background-secondary: #1e293b;
-    --color-background-tertiary: #334155;
+    /* 컬러 시스템 - 다크모드에 맞는 조정된 노란색 */
+    --color-primary: #fbbf24;
+    --color-primary-hover: #f59e0b;
+    --color-primary-light: #fcd34d;
+
+    /* 배경색 - 더 부드러운 다크톤 */
+    --color-background: #111827;
+    --color-background-secondary: #1f2937;
+    --color-background-tertiary: #374151;
 
     /* 텍스트 색상 */
-    --color-text-primary: #f8fafc;
-    --color-text-secondary: #e2e8f0;
-    --color-text-tertiary: #cbd5e1;
-    --color-text-muted: #94a3b8;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #e5e7eb;
+    --color-text-tertiary: #d1d5db;
+    --color-text-muted: #9ca3af;
 
     /* 보더 색상 */
-    --color-border: #334155;
-    --color-border-secondary: #475569;
+    --color-border: #374151;
+    --color-border-secondary: #4b5563;
 
     /* 그림자 - 다크모드에서는 더 강한 그림자 */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
@@ -66,20 +69,25 @@
 
 /* 다크모드 클래스 기반 (JavaScript로 토글 가능) */
 .dark {
-  /* 배경색 */
-  --color-background: #0f172a;
-  --color-background-secondary: #1e293b;
-  --color-background-tertiary: #334155;
+  /* 컬러 시스템 - 다크모드에 맞는 조정된 노란색 */
+  --color-primary: #fbbf24;
+  --color-primary-hover: #f59e0b;
+  --color-primary-light: #fcd34d;
+
+  /* 배경색 - 더 부드러운 다크톤 */
+  --color-background: #111827;
+  --color-background-secondary: #1f2937;
+  --color-background-tertiary: #374151;
 
   /* 텍스트 색상 */
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #e2e8f0;
-  --color-text-tertiary: #cbd5e1;
-  --color-text-muted: #94a3b8;
+  --color-text-primary: #f9fafb;
+  --color-text-secondary: #e5e7eb;
+  --color-text-tertiary: #d1d5db;
+  --color-text-muted: #9ca3af;
 
   /* 보더 색상 */
-  --color-border: #334155;
-  --color-border-secondary: #475569;
+  --color-border: #374151;
+  --color-border-secondary: #4b5563;
 
   /* 그림자 */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
@@ -216,90 +224,256 @@ a:hover {
   border-color: var(--color-border-secondary);
 }
 .btn-login {
-  display: flex;
-  width: 100%;
-  background-color: #ffffff;
+  display: center;
+  width: 80%;
+  background-color: var(--color-background);
   color: var(--color-primary);
-  padding: 15px 0;
+  padding: 1rem 0;
   align-items: center;
   border: 1px solid var(--color-primary);
-  margin-bottom: 7px;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 .btn-login:hover {
-  color: var(--color-text-secondary);
-  background-color: var(--color-primary-light);
+  color: var(--color-text-primary);
+  background-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 .btn-send {
   position: absolute;
-  background-color: #ffffff;
+  background-color: var(--color-background);
   color: var(--color-primary);
-  padding: 10px 0;
+  padding: 0.5rem 0.5rem;
   align-items: center;
-  border: 1px solid var(--color-primary);
-  margin-bottom: 7px;
-  width: 50px;
-  top: 38%;
-  right: -5%;
-  transform: translate(-50%, -50%);
+  width: 55px;
+  height: 2.25rem;
+  top: 35%;
+  right: 40px;
+  transform: translateY(-50%);
+  border-radius: calc(var(--border-radius) - 2px);
+  font-size: 1rem;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 .btn-send:hover {
-  color: var(--color-text-secondary);
-  background-color: var(--color-primary-light);
+  color: var(--color-text-primary);
+  transform: translateY(-50%) translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+.btn-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: translateY(-50%);
 }
 .btn-pw {
   position: absolute;
-  transform: translate(-50%, -50%);
-  bottom: 15%;
-  right: 1%;
+  transform: translateY(-50%);
+  top: 40%;
+  right: 3.2rem;
+  background: none;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+}
+.btn-pw:hover {
+  color: var(--color-text-secondary);
+  transform: translateY(-50%) scale(1.1);
 }
 /* 카드 스타일 */
 .card {
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-sm);
+  padding: 2rem;
+  box-shadow: var(--shadow-md);
   transition: var(--transition);
 }
 
 .card:hover {
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   transform: translateY(-2px);
 }
+
 .card-position {
   position: fixed;
   width: 400px;
-  height: 300px;
-  top: 40%;
+  min-height: 350px;
+  max-height: 90vh;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  overflow-y: auto;
 }
+
 .card-logo {
-  padding: 10px;
+  padding: 1.5rem 1rem;
+  margin-bottom: 1rem;
   font-size: 4.5rem;
   font-weight: bold;
   color: var(--color-primary);
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  pointer-events: none;
 }
 /* 입력 필드 스타일 */
 .input {
   width: 100%;
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
   font-size: 0.875rem;
   background-color: var(--color-background);
   border: 1px solid var(--color-border);
   border-radius: var(--border-radius);
   color: var(--color-text-primary);
   transition: var(--transition);
+  box-shadow: var(--shadow-sm);
 }
 
 .input:focus {
   outline: none;
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(239, 218, 13, 0.1);
+  box-shadow: 0 0 0 3px rgba(239, 218, 13, 0.1), var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.input:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-md);
 }
 
 .input::placeholder {
   color: var(--color-text-muted);
+}
+
+/* Auth 페이지용 특별 스타일 */
+.auth-input {
+  width: 80%;
+  height: 3.25rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.25rem;
+  font-size: 0.875rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  color: var(--color-text-primary);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  outline: none;
+}
+
+.auth-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15), var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.auth-input:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.auth-input::placeholder {
+  color: var(--color-text-muted);
+  font-weight: 400;
+}
+
+.auth-input:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.auth-duplicate-check {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition);
+  border: 1px solid transparent;
+}
+
+.auth-duplicate-check:hover {
+  background-color: var(--color-background-secondary);
+  border-color: var(--color-border);
+  transform: translateY(-1px);
+}
+
+/* 중복 검사 전용 버튼 스타일 */
+.btn-duplicate-check {
+  position: absolute;
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  padding: 0.5rem 0.5rem;
+  align-items: center;
+  width: 70px;
+  height: 2.25rem;
+  top: 35%;
+  right: 40px;
+  transform: translateY(-50%);
+  border-radius: calc(var(--border-radius) - 2px);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-duplicate-check:hover {
+  color: var(--color-text-primary);
+  transform: translateY(-50%) translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-duplicate-check:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: translateY(-50%);
+}
+
+.auth-result-box {
+  padding: 1rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--border-radius);
+  text-align: center;
+  font-weight: 500;
+  animation: fadeIn 0.3s ease-out;
+  box-shadow: var(--shadow-sm);
+}
+
+.auth-result-success {
+  background-color: #f0f9ff;
+  border: 1px solid #0ea5e9;
+  color: #0c4a6e;
+}
+
+.auth-section-spacing {
+  margin-bottom: 1.5rem;
+}
+
+.auth-section-spacing:last-child {
+  margin-bottom: 0;
+}
+
+.auth-text-link {
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  transition: var(--transition);
+  padding: 0.5rem;
+  border-radius: var(--border-radius);
+}
+
+.auth-text-link:hover {
+  color: var(--color-primary);
+  background-color: var(--color-background-secondary);
 }
 
 /* 유틸리티 클래스 */
