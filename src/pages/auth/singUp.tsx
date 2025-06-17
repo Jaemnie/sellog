@@ -19,6 +19,7 @@ const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
+  const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
   
   // Toast 메시지들
   const notifyEmptyName = () => {
@@ -85,6 +86,7 @@ const SignUp: React.FC = () => {
         autoClose: 2000,
       });
       setIsCheckingDuplicate(false);
+      setIsDuplicateChecked(true);
     }, 1000);
   };
   
@@ -116,7 +118,10 @@ const SignUp: React.FC = () => {
       return;
     }
     
-    // TODO: 중복검사 여부 확인 로직 추가
+    if (!isDuplicateChecked) {
+      notifyDuplicateCheck();
+      return;
+    }
     
     // 실제 회원가입 로직
     notifySignupSuccess();
@@ -152,7 +157,10 @@ const SignUp: React.FC = () => {
             type="text" 
             placeholder="아이디"
             value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            onChange={(e) => {
+              setUserId(e.target.value);
+              setIsDuplicateChecked(false);
+            }}
             onKeyPress={(e) => e.key === 'Enter' && handleDuplicateCheck()}
           />
           <button
