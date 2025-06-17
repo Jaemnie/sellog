@@ -5,7 +5,6 @@ import ChatList from "./pages/chat/chatList.tsx";
 import Login from "./pages/auth/login.tsx";
 import FindId from "./pages/auth/findId.tsx";
 import ForgotPw from "./pages/auth/forgotPw.tsx";
-
 function Router() {
   return (
     <BrowserRouter>

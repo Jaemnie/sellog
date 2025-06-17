@@ -9,7 +9,6 @@ import Login from "./pages/auth/login";
 import Join from "./pages/auth/singUp";
 import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
-
 function App() {
   return (
     <div
