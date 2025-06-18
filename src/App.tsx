@@ -7,7 +7,7 @@ import Home from "./pages/home/homePage";
 import FriendList from "./pages/social/friendList";
 import ChatList from "./pages/chat/chatList";
 import Login from "./pages/auth/login";
-import SignUp from "./pages/auth/singUp";
+import SignUp from "./pages/auth/signUp";
 import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
 
@@ -31,9 +31,9 @@ function App() {
           <Route path="/findId" element={<FindId />}></Route>
           <Route path="/forgotPw" element={<ForgotPw />}></Route>
         </Routes>
-        
+
         {/* 전역 Toast Container */}
-        <ToastContainer 
+        <ToastContainer
           position="top-center"
           autoClose={2000}
           hideProgressBar={false}

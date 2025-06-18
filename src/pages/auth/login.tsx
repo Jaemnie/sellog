@@ -11,12 +11,12 @@ interface LoginProps {
 
 const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
-  
+
   // 입력 상태 관리
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  
+
   /*url 경로*/
   const join = () => {
     navigate("/join");
@@ -27,7 +27,7 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
   const forgotPw = () => {
     navigate("/forgotPw");
   };
-  
+
   /*Toast 메시지들*/
   const notifyEmptyId = () => {
     toast.error("아이디를 입력해주세요.", {
@@ -35,21 +35,21 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
       autoClose: 2000,
     });
   };
-  
+
   const notifyEmptyPassword = () => {
     toast.error("비밀번호를 입력해주세요.", {
       toastId: "login-password-error",
       autoClose: 2000,
     });
   };
-  
+
   const notifyLoginSuccess = () => {
     toast.success("로그인 성공!", {
       toastId: "login-success",
       autoClose: 1500,
     });
   };
-  
+
   // 로그인 처리
   const handleLogin = () => {
     // 아이디 체크
@@ -57,13 +57,13 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
       notifyEmptyId();
       return;
     }
-    
+
     // 비밀번호 체크
     if (!password.trim()) {
       notifyEmptyPassword();
       return;
     }
-    
+
     // 실제 로그인 로직 (여기서는 성공 토스트만)
     notifyLoginSuccess();
     // TODO: 실제 로그인 API 호출
@@ -73,13 +73,13 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
     <div className="card-position">
       <div className="card-logo">SelLog</div>
       <div className="card">
-                <input
+        <input
           className="auth-input"
           type="text"
           placeholder="아이디"
           value={userId}
           onChange={(e) => setUserId(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+          onKeyPress={(e) => e.key === "Enter" && handleLogin()}
         />
         <div className="relative">
           <input
@@ -88,7 +88,7 @@ const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
             placeholder="비밀번호"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+            onKeyPress={(e) => e.key === "Enter" && handleLogin()}
           />
           <button
             className="btn-pw"
