@@ -9,7 +9,7 @@ import {
   signUp, 
   checkDuplicate,
   type SignUpRequest
-} from "../../assets/common/fetch";
+} from "../../assets/common";
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();

@@ -885,6 +885,85 @@ select:focus {
   outline: none;
 }
 
+/* =================================================================
+   플로팅 버튼 스타일 - 피드 올리기 버튼
+   ================================================================= */
+
+.floating-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 4px 12px rgba(245, 158, 11, 0.4),
+    0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  outline: none;
+}
+
+.floating-button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 
+    0 8px 20px rgba(245, 158, 11, 0.5),
+    0 4px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, var(--color-primary-hover) 0%, #b45309 100%);
+}
+
+.floating-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 
+    0 2px 8px rgba(245, 158, 11, 0.4),
+    0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.floating-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.floating-button svg {
+  transition: transform 0.2s ease;
+}
+
+.floating-button:hover svg {
+  transform: rotate(90deg);
+}
+
+/* 모바일에서의 크기 조정 */
+@media (max-width: 768px) {
+  .floating-button {
+    bottom: 20px;
+    right: 20px;
+    width: 52px;
+    height: 52px;
+  }
+}
+
+/* 작은 화면에서의 크기 조정 */
+@media (max-width: 480px) {
+  .floating-button {
+    bottom: 16px;
+    right: 16px;
+    width: 48px;
+    height: 48px;
+  }
+  
+  .floating-button svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
 /* 다크모드 전환 애니메이션 */
 * {
   transition: background-color 0.3s ease, border-color 0.3s ease,

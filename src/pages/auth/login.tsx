@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { toast } from "react-toastify";
 
-import { login, type LoginRequest } from "../../assets/common/fetch";
+import { login, type LoginRequest } from "../../assets/common";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const Login: React.FC = () => {
   };
 
   // 로그인 처리
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // 아이디 체크
     if (!userId.trim()) {
       notifyEmptyId();
@@ -62,9 +62,32 @@ const Login: React.FC = () => {
       return;
     }
 
-    // 실제 로그인 로직 (여기서는 성공 토스트만)
-    notifyLoginSuccess();
-    // TODO: 실제 로그인 API 호출
+    try {
+      const loginData: LoginRequest = {
+        userId: parseInt(userId), // userId는 숫자로 변환
+        password: password.trim(),
+      };
+
+      const response = await login(loginData);
+
+      if (response.isSuccess) {
+        notifyLoginSuccess();
+        setTimeout(() => {
+          navigate("/"); // 홈페이지로 이동
+        }, 1500);
+      } else {
+        toast.error(response.message || "로그인에 실패했습니다.", {
+          toastId: "login-error",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("로그인 오류:", error);
+      toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.", {
+        toastId: "login-error",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (

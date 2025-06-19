@@ -1,4 +1,5 @@
 import React from "react";
+import { FloatingButton } from "../../assets/common";
 
 const Home = () => {
   // 목업 데이터
@@ -198,6 +199,14 @@ const Home = () => {
           ))}
         </div>
       </div>
+      
+      {/* 피드 올리기 플로팅 버튼 */}
+      <FloatingButton 
+        onClick={() => {
+          // TODO: 피드 올리기 기능 구현 (API 연결 시)
+          console.log('피드 올리기 버튼 클릭됨');
+        }}
+      />
     </div>
   );
 };

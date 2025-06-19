@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { findId, type FindIdRequest } from "../../assets/common/fetch";
+import { findId, type FindIdRequest } from "../../assets/common";
 
 const FindId: React.FC = () => {
   const navigate = useNavigate();
@@ -110,7 +110,7 @@ const FindId: React.FC = () => {
   };
 
   // 아이디 찾기
-  const handleFindId = () => {
+  const handleFindId = async () => {
     if (!name.trim()) {
       notifyEmptyName();
       return;
@@ -121,21 +121,38 @@ const FindId: React.FC = () => {
       return;
     }
 
-    // TODO: 실제 API 호출
-    setTimeout(() => {
-      const mockUserId = "user123"; // 실제로는 API에서 받아올 값
-      setFoundUserId(mockUserId);
+    try {
+      const findIdData: FindIdRequest = {
+        username: name.trim(),
+        email: email.trim(),
+      };
 
-      toast.success(`아이디를 찾았습니다: ${mockUserId}`, {
-        toastId: "findid-success",
+      const response = await findId(findIdData);
+
+      if (response.isSuccess && response.payload) {
+        setFoundUserId(response.payload);
+        toast.success(`아이디를 찾았습니다: ${response.payload}`, {
+          toastId: "findid-success",
+          autoClose: 3000,
+        });
+
+        // 3초 후 로그인 페이지로 이동
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      } else {
+        toast.error(response.message || "아이디를 찾을 수 없습니다.", {
+          toastId: "findid-error",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("아이디 찾기 오류:", error);
+      toast.error("아이디 찾기 중 오류가 발생했습니다. 다시 시도해주세요.", {
+        toastId: "findid-error",
         autoClose: 3000,
       });
-
-      // 3초 후 로그인 페이지로 이동
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
-    }, 500);
+    }
   };
 
   return (

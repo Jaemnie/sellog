@@ -8,7 +8,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import {
   forgotPassword,
   type ForgotPasswordRequest,
-} from "../../assets/common/fetch";
+} from "../../assets/common";
 
 const ForgotPw: React.FC = () => {
   const navigate = useNavigate();
@@ -140,7 +140,7 @@ const ForgotPw: React.FC = () => {
   };
 
   // 비밀번호 변경
-  const handlePasswordChange = () => {
+  const handlePasswordChange = async () => {
     if (!isEmailVerified) {
       notifyEmailNotVerified();
       return;
@@ -156,12 +156,34 @@ const ForgotPw: React.FC = () => {
       return;
     }
 
-    // 실제 비밀번호 변경 로직
-    notifyPasswordChangeSuccess();
-    // TODO: 실제 API 호출 후 성공시 로그인 페이지로 이동
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
+    try {
+      const forgotPasswordData: ForgotPasswordRequest = {
+        id: userId.trim(),
+        email: email.trim(),
+        password: newPassword.trim(),
+        passwordCk: newPasswordConfirm.trim(),
+      };
+
+      const response = await forgotPassword(forgotPasswordData);
+
+      if (response.isSuccess) {
+        notifyPasswordChangeSuccess();
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        toast.error(response.message || "비밀번호 변경에 실패했습니다.", {
+          toastId: "forgotpw-error",
+          autoClose: 3000,
+        });
+      }
+    } catch (error) {
+      console.error("비밀번호 변경 오류:", error);
+      toast.error("비밀번호 변경 중 오류가 발생했습니다. 다시 시도해주세요.", {
+        toastId: "forgotpw-error",
+        autoClose: 3000,
+      });
+    }
   };
 
   return (
