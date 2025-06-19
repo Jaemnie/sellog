@@ -2,20 +2,22 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import { findId, type FindIdRequest } from "../../assets/common/fetch";
+
 const FindId: React.FC = () => {
   const navigate = useNavigate();
-  
+
   // 입력 상태 관리
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  
+
   // UI 상태 관리
   const [isVerificationVisible, setIsVerificationVisible] = useState(false);
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [foundUserId, setFoundUserId] = useState("");
-  
+
   // Toast 메시지들
   const notifyEmptyName = () => {
     toast.error("이름을 입력해주세요.", {
@@ -23,58 +25,58 @@ const FindId: React.FC = () => {
       autoClose: 2000,
     });
   };
-  
+
   const notifyEmptyEmail = () => {
     toast.error("이메일을 입력해주세요.", {
       toastId: "findid-email-error",
       autoClose: 2000,
     });
   };
-  
+
   const notifyInvalidEmail = () => {
     toast.error("올바른 이메일 형식을 입력해주세요.", {
       toastId: "findid-email-invalid",
       autoClose: 2000,
     });
   };
-  
+
   const notifyEmptyVerificationCode = () => {
     toast.error("인증번호를 입력해주세요.", {
       toastId: "findid-verification-error",
       autoClose: 2000,
     });
   };
-  
+
   const notifyEmailNotVerified = () => {
     toast.error("이메일 인증을 완료해주세요.", {
       toastId: "findid-email-not-verified",
       autoClose: 2000,
     });
   };
-  
+
   // 이메일 형식 검증
   const isValidEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
-  
+
   // 이메일 인증 전송
   const handleSendVerification = () => {
     if (!name.trim()) {
       notifyEmptyName();
       return;
     }
-    
+
     if (!email.trim()) {
       notifyEmptyEmail();
       return;
     }
-    
+
     if (!isValidEmail(email)) {
       notifyInvalidEmail();
       return;
     }
-    
+
     setIsSendingEmail(true);
     // TODO: 실제 API 호출
     setTimeout(() => {
@@ -86,14 +88,14 @@ const FindId: React.FC = () => {
       setIsSendingEmail(false);
     }, 1500);
   };
-  
+
   // 인증번호 확인
   const handleVerifyCode = () => {
     if (!verificationCode.trim()) {
       notifyEmptyVerificationCode();
       return;
     }
-    
+
     setIsVerifying(true);
     // TODO: 실제 API 호출
     setTimeout(() => {
@@ -106,29 +108,29 @@ const FindId: React.FC = () => {
       handleFindId();
     }, 1000);
   };
-  
+
   // 아이디 찾기
   const handleFindId = () => {
     if (!name.trim()) {
       notifyEmptyName();
       return;
     }
-    
+
     if (!isVerificationVisible) {
       notifyEmailNotVerified();
       return;
     }
-    
+
     // TODO: 실제 API 호출
     setTimeout(() => {
       const mockUserId = "user123"; // 실제로는 API에서 받아올 값
       setFoundUserId(mockUserId);
-      
+
       toast.success(`아이디를 찾았습니다: ${mockUserId}`, {
         toastId: "findid-success",
         autoClose: 3000,
       });
-      
+
       // 3초 후 로그인 페이지로 이동
       setTimeout(() => {
         navigate("/login");
@@ -140,13 +142,13 @@ const FindId: React.FC = () => {
     <div className="card-position">
       <div className="card-logo">SelLog</div>
       <div className="card">
-        <input 
-          className="auth-input" 
-          type="text" 
+        <input
+          className="auth-input"
+          type="text"
           placeholder="이름"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          onKeyPress={(e) => e.key === 'Enter' && handleSendVerification()}
+          onKeyPress={(e) => e.key === "Enter" && handleSendVerification()}
         />
         <div className="relative w-full">
           <input
@@ -155,10 +157,10 @@ const FindId: React.FC = () => {
             placeholder="이메일 본인 인증"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleSendVerification()}
+            onKeyPress={(e) => e.key === "Enter" && handleSendVerification()}
           />
-          <button 
-            className="btn btn-send" 
+          <button
+            className="btn btn-send"
             onClick={handleSendVerification}
             disabled={isSendingEmail}
             type="button"
@@ -166,17 +168,21 @@ const FindId: React.FC = () => {
             {isSendingEmail ? "전송중..." : "전송"}
           </button>
         </div>
-        <div className={`${isVerificationVisible ? "block" : "hidden"} relative w-full`}>
+        <div
+          className={`${
+            isVerificationVisible ? "block" : "hidden"
+          } relative w-full`}
+        >
           <input
             className="auth-input w-full"
             type="text"
             placeholder="인증번호 입력"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && handleVerifyCode()}
+            onKeyPress={(e) => e.key === "Enter" && handleVerifyCode()}
           />
-          <button 
-            className="btn btn-send" 
+          <button
+            className="btn btn-send"
             onClick={handleVerifyCode}
             disabled={isVerifying}
             type="button"
@@ -184,13 +190,13 @@ const FindId: React.FC = () => {
             {isVerifying ? "인증중..." : "인증"}
           </button>
         </div>
-        
+
         {foundUserId && (
           <div className="auth-result-box auth-result-success">
             <strong>찾은 아이디: {foundUserId}</strong>
           </div>
         )}
-        
+
         <button className="btn-login btn" onClick={handleFindId}>
           아이디 찾기
         </button>

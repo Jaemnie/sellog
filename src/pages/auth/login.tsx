@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { toast } from "react-toastify";
 
+import { login, type LoginRequest } from "../../assets/common/fetch";
+
 const Login: React.FC = () => {
   const navigate = useNavigate();
 
