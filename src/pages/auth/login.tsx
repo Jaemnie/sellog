@@ -5,11 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { toast } from "react-toastify";
 
-interface LoginProps {
-  title?: string;
-}
-
-const Login: React.FC<LoginProps> = ({ title = "My App" }) => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
 
   // 입력 상태 관리

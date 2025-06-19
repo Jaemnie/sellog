@@ -5,6 +5,12 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
+import { 
+  signUp, 
+  checkDuplicate,
+  type SignUpRequest
+} from "../../assets/common/fetch";
+
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
 
@@ -19,6 +25,8 @@ const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
+  const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
+  const [isSigningUp, setIsSigningUp] = useState(false);
 
   // Toast 메시지들
   const notifyEmptyName = () => {
@@ -70,6 +78,19 @@ const SignUp: React.FC = () => {
     });
   };
 
+  const notifySignupError = (message: string) => {
+    toast.error(message, {
+      toastId: "signup-error",
+      autoClose: 3000,
+    });
+  };
+
+  // 아이디 변경 시 중복검사 상태 리셋
+  const handleUserIdChange = (value: string) => {
+    setUserId(value);
+    setIsDuplicateChecked(false);
+  };
+
   const notifySignupSuccess = () => {
     toast.success("회원가입이 완료되었습니다!", {
       toastId: "signup-success",
@@ -78,25 +99,48 @@ const SignUp: React.FC = () => {
   };
 
   // 아이디 중복 검사
-  const handleDuplicateCheck = () => {
+  const handleDuplicateCheck = async () => {
     if (!userId.trim()) {
       notifyEmptyUserId();
       return;
     }
 
     setIsCheckingDuplicate(true);
-    // TODO: 실제 API 호출
-    setTimeout(() => {
-      toast.success("사용 가능한 아이디입니다.", {
-        toastId: "duplicate-check-success",
-        autoClose: 2000,
+    
+    try {
+      const response = await checkDuplicate({ userId });
+      
+      if (response.isSuccess && response.payload) {
+        if (response.payload.available) {
+          setIsDuplicateChecked(true);
+          toast.success("사용 가능한 아이디입니다.", {
+            toastId: "duplicate-check-success",
+            autoClose: 2000,
+          });
+        } else {
+          setIsDuplicateChecked(false);
+          toast.error("이미 사용 중인 아이디입니다.", {
+            toastId: "duplicate-check-fail",
+            autoClose: 2000,
+          });
+        }
+      } else {
+        throw new Error(response.message || "중복검사에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("아이디 중복검사 오류:", error);
+      toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
+        toastId: "duplicate-check-error",
+        autoClose: 3000,
       });
+      setIsDuplicateChecked(false);
+    } finally {
       setIsCheckingDuplicate(false);
-    }, 1000);
+    }
   };
 
   // 회원가입 처리
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     // 유효성 검사
     if (!name.trim()) {
       notifyEmptyName();
@@ -117,19 +161,51 @@ const SignUp: React.FC = () => {
       notifyEmptyPassword();
       return;
     }
+
     if (password !== passwordConfirm) {
       notifyPasswordMismatch();
       return;
     }
 
-    // TODO: 중복검사 여부 확인 로직 추가
+    if (!email.trim()) {
+      notifyEmail();
+      return;
+    }
 
-    // 실제 회원가입 로직
-    notifySignupSuccess();
-    // TODO: 실제 API 호출 후 성공시 로그인 페이지로 이동
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
+    // 중복검사는 선택사항으로 처리
+     if (!isDuplicateChecked) {
+       notifyDuplicateCheck();
+       return;
+     }
+
+    setIsSigningUp(true);
+
+    try {
+      const signUpData: SignUpRequest = {
+        name: name.trim(),
+        nickname: nickname.trim(),
+        userId: userId.trim(),
+        password: password.trim(),
+        email: email.trim(),
+      };
+
+      const response = await signUp(signUpData);
+
+      if (response.isSuccess) {
+        notifySignupSuccess();
+        setTimeout(() => {
+          navigate("/login");
+        }, 1500);
+      } else {
+        throw new Error(response.message || "회원가입에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("회원가입 오류:", error);
+      const errorMessage = error instanceof Error ? error.message : "회원가입 중 오류가 발생했습니다.";
+      notifySignupError(errorMessage);
+    } finally {
+      setIsSigningUp(false);
+    }
   };
 
   return (
@@ -158,7 +234,7 @@ const SignUp: React.FC = () => {
             type="text"
             placeholder="아이디"
             value={userId}
-            onChange={(e) => setUserId(e.target.value)}
+            onChange={(e) => handleUserIdChange(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleDuplicateCheck()}
           />
           <button
@@ -189,7 +265,7 @@ const SignUp: React.FC = () => {
         </div>
         <div className="relative">
           <input
-            className="auth-input mb-4"
+            className="auth-input"
             type={showPasswordCk ? "text" : "password"}
             placeholder="비밀번호 확인"
             value={passwordConfirm}
@@ -205,8 +281,21 @@ const SignUp: React.FC = () => {
           </button>
         </div>
 
-        <button className="btn-login btn" onClick={handleSignUp}>
-          회원가입 완료
+        <input
+          className="auth-input mb-4"
+          type="email"
+          placeholder="이메일"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
+        />
+
+        <button 
+          className="btn-login btn" 
+          onClick={handleSignUp}
+          disabled={isSigningUp}
+        >
+          {isSigningUp ? "회원가입 중..." : "회원가입 완료"}
         </button>
       </div>
     </div>
