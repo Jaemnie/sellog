@@ -16,8 +16,8 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   /*url 경로*/
-  const join = () => {
-    navigate("/join");
+  const signUp = () => {
+    navigate("/signUp");
   };
   const findId = () => {
     navigate("/findId");
@@ -64,7 +64,7 @@ const Login: React.FC = () => {
 
     try {
       const loginData: LoginRequest = {
-        userId: parseInt(userId), // userId는 숫자로 변환
+        userId: userId.trim(), // userId는 숫자로 변환
         password: password.trim(),
       };
 
@@ -123,7 +123,7 @@ const Login: React.FC = () => {
         <button className="btn-login btn" onClick={handleLogin}>
           로그인
         </button>
-        <button className="btn-login btn" onClick={join}>
+        <button className="btn-login btn" onClick={signUp}>
           회원가입
         </button>
         <div className="flex w-full justify-between">

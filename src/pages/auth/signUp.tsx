@@ -5,10 +5,10 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
-import { 
-  signUp, 
+import {
+  signUp,
   checkDuplicate,
-  type SignUpRequest
+  type SignUpRequest,
 } from "../../assets/common";
 
 const SignUp: React.FC = () => {
@@ -106,10 +106,8 @@ const SignUp: React.FC = () => {
     }
 
     setIsCheckingDuplicate(true);
-    
     try {
       const response = await checkDuplicate({ userId });
-      
       if (response.isSuccess && response.payload) {
         if (response.payload.available) {
           setIsDuplicateChecked(true);
@@ -173,10 +171,10 @@ const SignUp: React.FC = () => {
     }
 
     // 중복검사는 선택사항으로 처리
-     if (!isDuplicateChecked) {
-       notifyDuplicateCheck();
-       return;
-     }
+    if (!isDuplicateChecked) {
+      notifyDuplicateCheck();
+      return;
+    }
 
     setIsSigningUp(true);
 
@@ -201,7 +199,10 @@ const SignUp: React.FC = () => {
       }
     } catch (error) {
       console.error("회원가입 오류:", error);
-      const errorMessage = error instanceof Error ? error.message : "회원가입 중 오류가 발생했습니다.";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다.";
       notifySignupError(errorMessage);
     } finally {
       setIsSigningUp(false);
@@ -290,8 +291,8 @@ const SignUp: React.FC = () => {
           onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
         />
 
-        <button 
-          className="btn-login btn" 
+        <button
+          className="btn-login btn"
           onClick={handleSignUp}
           disabled={isSigningUp}
         >
