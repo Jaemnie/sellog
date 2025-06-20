@@ -108,22 +108,19 @@ const SignUp: React.FC = () => {
     setIsCheckingDuplicate(true);
     try {
       const response = await checkDuplicate({ userId });
-      if (response.isSuccess && response.payload) {
-        if (response.payload.available) {
-          setIsDuplicateChecked(true);
-          toast.success("사용 가능한 아이디입니다.", {
-            toastId: "duplicate-check-success",
-            autoClose: 2000,
-          });
-        } else {
-          setIsDuplicateChecked(false);
-          toast.error("이미 사용 중인 아이디입니다.", {
-            toastId: "duplicate-check-fail",
-            autoClose: 2000,
-          });
-        }
+      
+      if (response.isSuccess) {
+        setIsDuplicateChecked(true);
+        toast.success("사용 가능한 아이디입니다.", {
+          toastId: "duplicate-check-success",
+          autoClose: 2000,
+        });
       } else {
-        throw new Error(response.message || "중복검사에 실패했습니다.");
+        setIsDuplicateChecked(false);
+        toast.error("이미 사용 중인 아이디입니다.", {
+          toastId: "duplicate-check-fail",
+          autoClose: 2000,
+        });
       }
     } catch (error) {
       console.error("아이디 중복검사 오류:", error);
