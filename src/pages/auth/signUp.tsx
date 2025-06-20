@@ -24,7 +24,9 @@ const SignUp: React.FC = () => {
   // UI 상태 관리
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
+  // API 호출
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
+  // 회원가입 전 중복검사 했는지 체크
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
 
@@ -108,7 +110,7 @@ const SignUp: React.FC = () => {
     setIsCheckingDuplicate(true);
     try {
       const response = await checkDuplicate({ userId });
-      
+
       if (response.isSuccess) {
         setIsDuplicateChecked(true);
         toast.success("사용 가능한 아이디입니다.", {

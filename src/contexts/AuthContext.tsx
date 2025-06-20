@@ -11,9 +11,14 @@ interface AuthContextType {
   logOut: () => void;
 }
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isLoggedin, setLoggedIn] = useState(false);
+  const [isLoggedin, setLoggedIn] = useState<boolean>(
+    !!localStorage.getItem("accessToken")
+  );
   const logIn = () => setLoggedIn(true);
-  const logOut = () => setLoggedIn(false);
+  const logOut = () => {
+    localStorage.removeItem("accessToken");
+    setLoggedIn(false);
+  };
 
   return (
     <AuthContext.Provider value={{ isLoggedin, logIn, logOut }}>

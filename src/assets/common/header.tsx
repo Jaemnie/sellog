@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
 interface HeaderProps {
   title?: string;
 }
@@ -8,7 +7,21 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const [isLoggedin, setLoggedIn] = useState(false);
+  //localStorage에 accessToken 있는지 확인
+  useEffect(() => {
+    const userToken = localStorage.getItem("accessToken");
+    setLoggedIn(!!userToken); //토큰 있으면 true
+  });
+  const handleLogin = () => {
+    setLoggedIn(true);
+    navigate("/login");
+  };
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    setLoggedIn(false);
+    navigate("/login");
+  };
   const home = () => {
     navigate("/home");
   };
@@ -71,8 +84,11 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             >
               채팅
             </button>
-            <button onClick={login} className="btn btn-primary text-sm">
-              로그인
+            <button
+              onClick={isLoggedin ? handleLogout : handleLogin}
+              className="btn btn-primary text-sm"
+            >
+              {isLoggedin ? "로그아웃" : "로그인"}
             </button>
           </nav>
 
