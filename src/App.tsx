@@ -26,25 +26,30 @@ function App() {
 
           <Routes>
             {/* 루트 경로를 홈으로 리다이렉트 */}
-            <Route path="/" element={<Navigate to="/home" replace />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
             
             {/* 공개 라우트 */}
-            <Route path="/home" element={<Home />}></Route>
-            <Route path="/friendList" element={<FriendList />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signUp" element={<SignUp />}></Route>
             <Route path="/findId" element={<FindId />}></Route>
             <Route path="/forgotPw" element={<ForgotPw />}></Route>
 
             {/* 비공개 라우트 */}
-            <Route
-              path="/chatList"
-              element={
-                <RequireAuth>
-                  <ChatList />
-                </RequireAuth>
-              }
-            ></Route>
+            <Route path="/home" element={
+              <RequireAuth>
+                <Home />
+              </RequireAuth>
+            } />
+            <Route path="/friendList" element={
+              <RequireAuth>
+                <FriendList />
+              </RequireAuth>
+            } />
+            <Route path="/chatList" element={
+              <RequireAuth>
+                <ChatList />
+              </RequireAuth>
+            } />
           </Routes>
 
           {/* 전역 Toast Container */}
