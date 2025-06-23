@@ -1,9 +1,9 @@
 import { Header } from "./assets/common";
 import { RequireAuth } from "./assets/common/RequireAuth";
 import "./App.css";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { AuthContext, AuthProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import Home from "./pages/home/homePage";
 import FriendList from "./pages/social/friendList";
 import ChatList from "./pages/chat/chatList";
@@ -11,10 +11,6 @@ import Login from "./pages/auth/login";
 import SignUp from "./pages/auth/signUp";
 import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
-
-import axios from "axios";
-
-axios.defaults.withCredentials = true;
 
 function App() {
   return (
@@ -29,6 +25,9 @@ function App() {
           {/* 헤더가 fixed이므로 padding-top 추가 */}
 
           <Routes>
+            {/* 루트 경로를 홈으로 리다이렉트 */}
+            <Route path="/" element={<Navigate to="/home" replace />} />
+            
             {/* 공개 라우트 */}
             <Route path="/home" element={<Home />}></Route>
             <Route path="/friendList" element={<FriendList />}></Route>

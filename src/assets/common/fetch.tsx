@@ -36,10 +36,6 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface RefreshTokenRequest {
-  refreshToken: string;
-}
-
 export interface FindIdRequest {
   username: string;
   email: string;
@@ -55,17 +51,19 @@ export interface ForgotPasswordRequest {
 export interface DuplicateCheckRequest {
   userId: string;
 }
+
 // ============================
-// 토큰
+// 헬퍼 함수
 // ============================
-import axios from "axios";
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-  },
-  withCredentials: true,
-});
+function notifyAuthStateChange() {
+  // Context가 감지할 수 있도록 storage 이벤트 발생
+  window.dispatchEvent(new StorageEvent('storage', {
+    key: 'accessToken',
+    newValue: localStorage.getItem('accessToken'),
+    url: window.location.href
+  }));
+}
+
 // ============================
 // 공통 fetch 함수
 // ============================
@@ -90,6 +88,7 @@ export async function apiFetch<T>(
       ...defaultHeaders,
       ...options.headers,
     },
+    credentials: 'include', // 쿠키 자동 전송
   };
 
   try {
@@ -110,7 +109,7 @@ export async function apiFetch<T>(
       }
       // 토큰 재발급 실패 시 로그인 페이지로 리다이렉트
       localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
+      notifyAuthStateChange();
       window.location.href = "/login";
       throw new Error("Authentication failed");
     }
@@ -146,21 +145,20 @@ export async function login(
     body: JSON.stringify(userData),
   });
 
-  // 로그인 성공 시 토큰 저장
+  // 로그인 성공 시 accessToken만 localStorage에 저장
+  // refreshToken은 서버에서 httpOnly 쿠키로 설정됨
   if (response.isSuccess && response.payload) {
     localStorage.setItem("accessToken", response.payload.accessToken);
-    localStorage.setItem("refreshToken", response.payload.refreshToken);
+    notifyAuthStateChange();
   }
 
   return response;
 }
 
-export async function refreshToken(
-  refreshToken: string
-): Promise<ApiResponse<AuthTokens>> {
+export async function refreshToken(): Promise<ApiResponse<AuthTokens>> {
+  // refreshToken은 httpOnly 쿠키로 자동 전송됨
   return apiFetch<ApiResponse<AuthTokens>>("/auth/refresh", {
     method: "POST",
-    body: JSON.stringify({ refreshToken }),
   });
 }
 
@@ -199,9 +197,10 @@ export async function logout(): Promise<void> {
   } catch (error) {
     console.error("로그아웃 API 요청 실패:", error);
   } finally {
-    // API 실패 여부와 관계없이 로컬 토큰 제거
+    // accessToken만 localStorage에서 제거
+    // refreshToken은 서버에서 쿠키 삭제 처리
     localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    notifyAuthStateChange();
   }
 }
 
@@ -210,15 +209,10 @@ export async function logout(): Promise<void> {
 // ============================
 async function tryRefreshToken(): Promise<boolean> {
   try {
-    const refreshTokenValue = localStorage.getItem("refreshToken");
-    if (!refreshTokenValue) {
-      return false;
-    }
-
-    const response = await refreshToken(refreshTokenValue);
+    const response = await refreshToken();
     if (response.isSuccess && response.payload) {
       localStorage.setItem("accessToken", response.payload.accessToken);
-      localStorage.setItem("refreshToken", response.payload.refreshToken);
+      notifyAuthStateChange();
       return true;
     }
     return false;

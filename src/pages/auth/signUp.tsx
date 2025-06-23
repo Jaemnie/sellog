@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-
 import {
   signUp,
   checkDuplicate,
@@ -13,97 +11,29 @@ import {
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
-
-  // 입력 상태 관리
   const [name, setName] = useState("");
   const [nickname, setNickname] = useState("");
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [email, setEmail] = useState("");
-  // UI 상태 관리
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
-  // API 호출
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
-  // 회원가입 전 중복검사 했는지 체크
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
 
-  // Toast 메시지들
-  const notifyEmptyName = () => {
-    toast.error("이름을 입력해주세요.", {
-      toastId: "signup-name-error",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyEmptyNickname = () => {
-    toast.error("닉네임을 입력해주세요.", {
-      toastId: "signup-nickname-error",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyEmptyUserId = () => {
-    toast.error("아이디를 입력해주세요.", {
-      toastId: "signup-userid-error",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyEmptyPassword = () => {
-    toast.error("비밀번호를 입력해주세요.", {
-      toastId: "signup-password-error",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyPasswordMismatch = () => {
-    toast.error("비밀번호가 일치하지 않습니다.", {
-      toastId: "signup-password-mismatch",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyEmail = () => {
-    toast.error("이메일을 입력해주세요.", {
-      toastId: "signup-email-error",
-      autoClose: 2000,
-    });
-  };
-
-  const notifyDuplicateCheck = () => {
-    toast.info("아이디 중복검사를 해주세요.", {
-      toastId: "signup-duplicate-check",
-      autoClose: 2000,
-    });
-  };
-
-  const notifySignupError = (message: string) => {
-    toast.error(message, {
-      toastId: "signup-error",
-      autoClose: 3000,
-    });
-  };
-
-  // 아이디 변경 시 중복검사 상태 리셋
   const handleUserIdChange = (value: string) => {
     setUserId(value);
     setIsDuplicateChecked(false);
   };
 
-  const notifySignupSuccess = () => {
-    toast.success("회원가입이 완료되었습니다!", {
-      toastId: "signup-success",
-      autoClose: 1500,
-    });
-  };
-
-  // 아이디 중복 검사
   const handleDuplicateCheck = async () => {
     if (!userId.trim()) {
-      notifyEmptyUserId();
+      toast.error("아이디를 입력해주세요.", {
+        toastId: "signup-userid-error",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -136,42 +66,39 @@ const SignUp: React.FC = () => {
     }
   };
 
-  // 회원가입 처리
   const handleSignUp = async () => {
-    // 유효성 검사
     if (!name.trim()) {
-      notifyEmptyName();
+      toast.error("이름을 입력해주세요.", { toastId: "signup-name-error", autoClose: 2000 });
       return;
     }
 
     if (!nickname.trim()) {
-      notifyEmptyNickname();
+      toast.error("닉네임을 입력해주세요.", { toastId: "signup-nickname-error", autoClose: 2000 });
       return;
     }
 
     if (!userId.trim()) {
-      notifyEmptyUserId();
+      toast.error("아이디를 입력해주세요.", { toastId: "signup-userid-error", autoClose: 2000 });
       return;
     }
 
     if (!password.trim()) {
-      notifyEmptyPassword();
+      toast.error("비밀번호를 입력해주세요.", { toastId: "signup-password-error", autoClose: 2000 });
       return;
     }
 
     if (password !== passwordConfirm) {
-      notifyPasswordMismatch();
+      toast.error("비밀번호가 일치하지 않습니다.", { toastId: "signup-password-mismatch", autoClose: 2000 });
       return;
     }
 
     if (!email.trim()) {
-      notifyEmail();
+      toast.error("이메일을 입력해주세요.", { toastId: "signup-email-error", autoClose: 2000 });
       return;
     }
 
-    // 중복검사는 선택사항으로 처리
     if (!isDuplicateChecked) {
-      notifyDuplicateCheck();
+      toast.info("아이디 중복검사를 해주세요.", { toastId: "signup-duplicate-check", autoClose: 2000 });
       return;
     }
 
@@ -189,7 +116,11 @@ const SignUp: React.FC = () => {
       const response = await signUp(signUpData);
 
       if (response.isSuccess) {
-        notifySignupSuccess();
+        toast.success("회원가입이 완료되었습니다!", {
+          toastId: "signup-success",
+          autoClose: 1500,
+        });
+
         setTimeout(() => {
           navigate("/login");
         }, 1500);
@@ -198,11 +129,8 @@ const SignUp: React.FC = () => {
       }
     } catch (error) {
       console.error("회원가입 오류:", error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "회원가입 중 오류가 발생했습니다.";
-      notifySignupError(errorMessage);
+      const errorMessage = error instanceof Error ? error.message : "회원가입 중 오류가 발생했습니다.";
+      toast.error(errorMessage, { toastId: "signup-error", autoClose: 3000 });
     } finally {
       setIsSigningUp(false);
     }

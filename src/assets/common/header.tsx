@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+
 interface HeaderProps {
   title?: string;
 }
@@ -7,33 +9,13 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoggedin, setLoggedIn] = useState(false);
-  //localStorage에 accessToken 있는지 확인
-  useEffect(() => {
-    const userToken = localStorage.getItem("accessToken");
-    setLoggedIn(!!userToken); //토큰 있으면 true
-  });
-  const handleLogin = () => {
-    setLoggedIn(true);
+  const { isLoggedin, logout } = useAuth();
+  
+  const handleLogout = async () => {
+    await logout();
     navigate("/login");
   };
-  const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    setLoggedIn(false);
-    navigate("/login");
-  };
-  const home = () => {
-    navigate("/home");
-  };
-  const friendList = () => {
-    navigate("/friendList");
-  };
-  const chatClick = () => {
-    navigate("/chatList");
-  };
-  const login = () => {
-    navigate("/login");
-  };
+
   const headerStyles = {
     backgroundColor: "var(--color-background)",
     borderBottom: "1px solid var(--color-border)",
@@ -51,6 +33,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
     backgroundColor: "var(--color-background)",
     borderTop: "1px solid var(--color-border)",
   };
+
   return (
     <header
       className="fixed top-0 left-0 right-0 z-50 shadow-md"
@@ -58,8 +41,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          {/* SL 로고 */}
-          <div onClick={home} className="flex-shrink-0 ">
+          <div onClick={() => navigate("/home")} className="flex-shrink-0 cursor-pointer">
             <h1
               className="text-xl sm:text-2xl font-bold"
               style={{ color: "var(--color-primary)" }}
@@ -68,31 +50,29 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             </h1>
           </div>
 
-          {/* 데스크톱 네비게이션 */}
           <nav className="hidden md:flex items-center space-x-4">
             <button
-              onClick={friendList}
+              onClick={() => navigate("/friendList")}
               className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:text-primary"
               style={linkStyles}
             >
               친구 찾기
             </button>
             <button
-              onClick={chatClick}
+              onClick={() => navigate("/chatList")}
               className="px-4 py-2 rounded-md text-sm font-medium transition-colors duration-300 hover:text-primary"
               style={linkStyles}
             >
               채팅
             </button>
             <button
-              onClick={isLoggedin ? handleLogout : handleLogin}
+              onClick={isLoggedin ? handleLogout : () => navigate("/login")}
               className="btn btn-primary text-sm"
             >
               {isLoggedin ? "로그아웃" : "로그인"}
             </button>
           </nav>
 
-          {/* 모바일 메뉴 버튼 */}
           <div className="md:hidden">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -136,7 +116,6 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
         </div>
       </div>
 
-      {/* 모바일 메뉴 */}
       {isMenuOpen && (
         <div className="md:hidden animate-fade-in">
           <div
@@ -144,18 +123,25 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             style={mobileMenuStyles}
           >
             <button
+              onClick={() => navigate("/friendList")}
               className="block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 hover:text-primary hover:bg-secondary"
               style={linkStyles}
             >
               친구 찾기
             </button>
             <button
+              onClick={() => navigate("/chatList")}
               className="block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors duration-300 hover:text-primary hover:bg-secondary"
               style={linkStyles}
             >
               채팅
             </button>
-            <button className="btn btn-primary w-full mt-2">로그인</button>
+            <button 
+              onClick={isLoggedin ? handleLogout : () => navigate("/login")}
+              className="btn btn-primary w-full mt-2"
+            >
+              {isLoggedin ? "로그아웃" : "로그인"}
+            </button>
           </div>
         </div>
       )}
