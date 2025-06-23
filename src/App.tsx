@@ -12,6 +12,10 @@ import SignUp from "./pages/auth/signUp";
 import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
 
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+
 function App() {
   return (
     <div

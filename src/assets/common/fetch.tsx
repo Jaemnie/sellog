@@ -55,7 +55,17 @@ export interface ForgotPasswordRequest {
 export interface DuplicateCheckRequest {
   userId: string;
 }
-
+// ============================
+// 토큰
+// ============================
+import axios from "axios";
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
+});
 // ============================
 // 공통 fetch 함수
 // ============================
