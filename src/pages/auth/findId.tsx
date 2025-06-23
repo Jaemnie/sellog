@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
-import { findId, type FindIdRequest } from "../../assets/common";
+import { findId, type FindIdRequest } from "../../api";
 
 const FindId: React.FC = () => {
   const navigate = useNavigate();

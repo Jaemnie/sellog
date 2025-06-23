@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import { toast } from "react-toastify";
 
-import { login, type LoginRequest } from "../../assets/common";
+import { login, type LoginRequest } from "../../api";
 import { useAuth } from "../../contexts/AuthContext";
 
 const Login: React.FC = () => {

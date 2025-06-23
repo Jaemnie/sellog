@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
 import type { ReactNode } from 'react';
-import { isAuthenticated, logout as apiLogout } from '../assets/common/fetch';
+import { isAuthenticated, logout as apiLogout } from '../api';
 
 interface AuthContextType {
   isLoggedin: boolean;

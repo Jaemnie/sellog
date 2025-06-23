@@ -8,7 +8,7 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import {
   forgotPassword,
   type ForgotPasswordRequest,
-} from "../../assets/common";
+} from "../../api";
 
 const ForgotPw: React.FC = () => {
   const navigate = useNavigate();

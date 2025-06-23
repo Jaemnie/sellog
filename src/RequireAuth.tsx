@@ -3,7 +3,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, type JSX } from "react";
 import { toast } from "react-toastify";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext";
 
 export const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const navigate = useNavigate();
@@ -24,4 +24,4 @@ export const RequireAuth = ({ children }: { children: JSX.Element }) => {
   }
   
   return children;
-};
+}; 

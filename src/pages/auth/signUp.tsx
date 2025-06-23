@@ -7,7 +7,7 @@ import {
   signUp,
   checkDuplicate,
   type SignUpRequest,
-} from "../../assets/common";
+} from "../../api";
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();

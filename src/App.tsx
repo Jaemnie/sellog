@@ -1,5 +1,5 @@
 import { Header } from "./assets/common";
-import { RequireAuth } from "./assets/common/RequireAuth";
+import { RequireAuth } from "./RequireAuth";
 import "./App.css";
 import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
