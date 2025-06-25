@@ -7,6 +7,7 @@
   --color-primary: #f59e0b;
   --color-primary-hover: #d97706;
   --color-primary-light: #fbbf24;
+  --color-profile-box: #fee9b3;
 
   /* 배경색 - 더 부드러운 크림/오프화이트 톤 */
   --color-background: #fefcf3;
@@ -285,6 +286,7 @@ a:hover {
   color: var(--color-text-secondary);
   transform: translateY(-50%) scale(1.1);
 }
+
 /* 카드 스타일 */
 .card {
   background-color: var(--color-background);
@@ -786,21 +788,100 @@ a:hover {
 .feed-comment-submit:hover {
   background-color: var(--color-primary-hover);
 }
-
+/* 프로필 디자인*/
+.profile-box {
+  margin-top: 40px;
+  max-width: 100vw;
+  flex-direction: column;
+}
+.profile-header {
+  display: flex;
+  padding: 10px;
+}
+.profile-icon {
+  font-size: 32px;
+  margin-top: 5px;
+}
+.profile-userid {
+  margin-left: 15px;
+  font-size: 27px;
+  justify-content: center;
+}
+.profile-info {
+  display: flex;
+  max-height: 100px;
+  padding: 4px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+.profile-img {
+  height: 100px;
+  width: 100px;
+  margin-right: 40px;
+  border-radius: 50%;
+}
+.profile-count {
+  display: flex;
+  justify-content: center;
+  border-radius: 15px;
+  background-color: var(--color-profile-box);
+  padding: 25px;
+}
+.profile-count > span {
+  margin-right: 45px;
+}
+.profile-count > span:last-child {
+  margin-right: 0;
+}
+.profile-count-text {
+  padding-top: 6px;
+}
+.profile-sell {
+  border: solid 2px;
+  border-radius: 10px;
+  border-color: var(--color-primary);
+  margin: 15px auto;
+  max-height: 110px;
+  max-width: 500px;
+  padding: 15px;
+}
+.profile-feed-box {
+  margin: auto;
+  background-color: var(--color-profile-box);
+  max-width: 500px;
+  padding: 20px;
+  border-radius: 20px;
+}
+.profile-btn-left {
+  display: flex;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding: 5px 15px;
+}
+.profile-btn-right {
+  display: flex;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 5px 15px;
+}
+.profile-feed {
+  margin: 10px;
+}
 /* 반응형 디자인 */
 @media (max-width: 768px) {
   .feed-wrapper {
     padding: 1rem 0.5rem;
   }
-  
+
   .feed-post-header {
     padding: 1rem;
   }
-  
+
   .feed-post-content {
     padding: 1rem;
   }
-  
+
   .feed-hashtag-badge {
     bottom: 1rem;
     left: 1rem;
@@ -896,16 +977,18 @@ select:focus {
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-hover) 100%
+  );
   border: none;
   color: var(--color-text-primary);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    0 4px 12px rgba(245, 158, 11, 0.4),
-    0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4), 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 1000;
   outline: none;
@@ -913,17 +996,17 @@ select:focus {
 
 .floating-button:hover {
   transform: translateY(-2px) scale(1.05);
-  box-shadow: 
-    0 8px 20px rgba(245, 158, 11, 0.5),
-    0 4px 8px rgba(0, 0, 0, 0.15);
-  background: linear-gradient(135deg, var(--color-primary-hover) 0%, #b45309 100%);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5), 0 4px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(
+    135deg,
+    var(--color-primary-hover) 0%,
+    #b45309 100%
+  );
 }
 
 .floating-button:active {
   transform: translateY(0) scale(0.98);
-  box-shadow: 
-    0 2px 8px rgba(245, 158, 11, 0.4),
-    0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4), 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .floating-button:focus-visible {
@@ -957,7 +1040,7 @@ select:focus {
     width: 48px;
     height: 48px;
   }
-  
+
   .floating-button svg {
     width: 20px;
     height: 20px;

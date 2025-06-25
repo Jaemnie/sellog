@@ -12,6 +12,7 @@ import SignUp from "./pages/auth/signUp";
 import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
 
+import Profile from "./assets/common/profile";
 function App() {
   return (
     <div
@@ -21,13 +22,12 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Header title="Sellog" />
-
           {/* 헤더가 fixed이므로 padding-top 추가 */}
 
           <Routes>
             {/* 루트 경로를 홈으로 리다이렉트 */}
             <Route path="/" element={<Navigate to="/login" replace />} />
-            
+
             {/* 공개 라우트 */}
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signUp" element={<SignUp />}></Route>
@@ -35,21 +35,38 @@ function App() {
             <Route path="/forgotPw" element={<ForgotPw />}></Route>
 
             {/* 비공개 라우트 */}
-            <Route path="/home" element={
-              <RequireAuth>
-                <Home />
-              </RequireAuth>
-            } />
-            <Route path="/friendList" element={
-              <RequireAuth>
-                <FriendList />
-              </RequireAuth>
-            } />
-            <Route path="/chatList" element={
-              <RequireAuth>
-                <ChatList />
-              </RequireAuth>
-            } />
+            <Route
+              path="/home"
+              element={
+                <RequireAuth>
+                  <Home />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/friendList"
+              element={
+                <RequireAuth>
+                  <FriendList />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/chatList"
+              element={
+                <RequireAuth>
+                  <ChatList />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/myprofile"
+              element={
+                <RequireAuth>
+                  <Profile />
+                </RequireAuth>
+              }
+            />
           </Routes>
 
           {/* 전역 Toast Container */}

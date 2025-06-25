@@ -1,25 +1,28 @@
 // 인증 관련 API 함수들
-import { apiFetch } from './client';
+import { apiFetch } from "./client";
 import type {
   ApiResponse,
   AuthTokens,
+  ProfileNick,
   SignUpRequest,
   LoginRequest,
   FindIdRequest,
   ForgotPasswordRequest,
-  DuplicateCheckRequest
-} from './types';
+  DuplicateCheckRequest,
+} from "./types";
 
 // ============================
 // 헬퍼 함수
 // ============================
 function notifyAuthStateChange() {
   // Context가 감지할 수 있도록 storage 이벤트 발생
-  window.dispatchEvent(new StorageEvent('storage', {
-    key: 'accessToken',
-    newValue: localStorage.getItem('accessToken'),
-    url: window.location.href
-  }));
+  window.dispatchEvent(
+    new StorageEvent("storage", {
+      key: "accessToken",
+      newValue: localStorage.getItem("accessToken"),
+      url: window.location.href,
+    })
+  );
 }
 
 // ============================
@@ -46,6 +49,8 @@ export async function login(
   // refreshToken은 서버에서 httpOnly 쿠키로 설정됨
   if (response.isSuccess && response.payload) {
     localStorage.setItem("accessToken", response.payload.accessToken);
+    localStorage.setItem("userId", userData.userId);
+    console.log(userData.userId);
     notifyAuthStateChange();
   }
 
@@ -92,4 +97,13 @@ export async function logout(): Promise<void> {
     localStorage.removeItem("accessToken");
     notifyAuthStateChange();
   }
-} 
+}
+export async function profile(): Promise<ApiResponse<ProfileNick>> {
+  const response = await apiFetch<ApiResponse<ProfileNick>>(
+    `/auth/{userId}/profile`,
+    {
+      method: "GET",
+    }
+  );
+  return response;
+}

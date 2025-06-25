@@ -15,6 +15,7 @@ const Login: React.FC = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
   const handleLogin = async () => {
     if (!userId.trim()) {
       toast.error("아이디를 입력해주세요.", {
@@ -37,17 +38,17 @@ const Login: React.FC = () => {
         userId: userId.trim(),
         password: password.trim(),
       };
-
       const response = await login(loginData);
 
-      if (response.isSuccess) {
+      if (response.isSuccess && response.payload) {
+        localStorage.setItem("accessToken", response.payload.accessToken);
         updateAuthState();
         toast.success("로그인 성공!", {
           toastId: "login-success",
           autoClose: 1500,
         });
         setTimeout(() => {
-          navigate("/");
+          navigate("/home");
         }, 1500);
       } else {
         toast.error(response.message || "로그인에 실패했습니다.", {

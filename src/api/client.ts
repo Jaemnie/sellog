@@ -1,5 +1,5 @@
 // API 클라이언트 - 공통 fetch 함수와 기본 설정
-import type { ApiResponse, AuthTokens } from './types';
+import type { ApiResponse, AuthTokens } from "./types";
 
 // ============================
 // 기본 설정
@@ -11,11 +11,13 @@ const API_BASE_URL = import.meta.env.VITE_API_URL;
 // ============================
 function notifyAuthStateChange() {
   // Context가 감지할 수 있도록 storage 이벤트 발생
-  window.dispatchEvent(new StorageEvent('storage', {
-    key: 'accessToken',
-    newValue: localStorage.getItem('accessToken'),
-    url: window.location.href
-  }));
+  window.dispatchEvent(
+    new StorageEvent("storage", {
+      key: "accessToken",
+      newValue: localStorage.getItem("accessToken"),
+      url: window.location.href,
+    })
+  );
 }
 
 // ============================
@@ -75,7 +77,7 @@ export async function apiFetch<T>(
       ...defaultHeaders,
       ...options.headers,
     },
-    credentials: 'include', // 쿠키 자동 전송
+    credentials: "include", // 쿠키 자동 전송
   };
 
   try {
@@ -110,4 +112,4 @@ export async function apiFetch<T>(
     console.error("API 요청 실패:", error);
     throw error;
   }
-} 
+}

@@ -10,10 +10,10 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedin, logout } = useAuth();
-  
-  const handleLogout = async () => {
-    await logout();
-    navigate("/login");
+
+  const handleMyPage = async () => {
+    // await logout();
+    navigate("/myprofile");
   };
 
   const headerStyles = {
@@ -41,7 +41,10 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <div onClick={() => navigate("/home")} className="flex-shrink-0 cursor-pointer">
+          <div
+            onClick={() => navigate("/home")}
+            className="flex-shrink-0 cursor-pointer"
+          >
             <h1
               className="text-xl sm:text-2xl font-bold"
               style={{ color: "var(--color-primary)" }}
@@ -66,10 +69,10 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
               채팅
             </button>
             <button
-              onClick={isLoggedin ? handleLogout : () => navigate("/login")}
+              onClick={isLoggedin ? handleMyPage : () => navigate("/myprofile")}
               className="btn btn-primary text-sm"
             >
-              {isLoggedin ? "로그아웃" : "로그인"}
+              {isLoggedin ? "내 프로필" : "로그인"}
             </button>
           </nav>
 
@@ -136,11 +139,11 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             >
               채팅
             </button>
-            <button 
-              onClick={isLoggedin ? handleLogout : () => navigate("/login")}
+            <button
+              onClick={isLoggedin ? handleMyPage : () => navigate("/myprofile")}
               className="btn btn-primary w-full mt-2"
             >
-              {isLoggedin ? "로그아웃" : "로그인"}
+              {isLoggedin ? "내 프로필" : "로그인"}
             </button>
           </div>
         </div>

@@ -13,8 +13,26 @@ export interface ApiResponse<T> {
 export interface AuthTokens {
   accessToken: string;
   refreshToken: string;
+  userId: string;
 }
-
+export interface ProfileNick {
+  profileThumbURL: string;
+  profileURL: string;
+  userId: string;
+  userName: string;
+  nickname: string;
+  gender: string;
+  profileMessage: string;
+  birthDay: string;
+  email: string;
+  phoneNumber: string;
+  userAddress: string;
+  score: number;
+  postCount: number;
+  productCount: number;
+  followCount: number;
+  followedCount: number;
+}
 // ============================
 // 인증 관련 타입
 // ============================
@@ -45,4 +63,4 @@ export interface ForgotPasswordRequest {
 
 export interface DuplicateCheckRequest {
   userId: string;
-} 
+}
