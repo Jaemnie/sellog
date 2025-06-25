@@ -3,7 +3,6 @@ import { apiFetch } from "./client";
 import type {
   ApiResponse,
   AuthTokens,
-  ProfileNick,
   SignUpRequest,
   LoginRequest,
   FindIdRequest,
@@ -98,12 +97,4 @@ export async function logout(): Promise<void> {
     notifyAuthStateChange();
   }
 }
-export async function profile(): Promise<ApiResponse<ProfileNick>> {
-  const response = await apiFetch<ApiResponse<ProfileNick>>(
-    `/auth/{userId}/profile`,
-    {
-      method: "GET",
-    }
-  );
-  return response;
-}
+

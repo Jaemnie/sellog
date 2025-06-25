@@ -7,4 +7,7 @@ export * from './types';
 export * from './client';
 
 // 인증 관련 API
-export * from './auth'; 
+export * from './auth';
+
+// 프로필 관련 API
+export * from './profile'; 

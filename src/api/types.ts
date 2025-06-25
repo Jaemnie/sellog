@@ -15,7 +15,7 @@ export interface AuthTokens {
   refreshToken: string;
   userId: string;
 }
-export interface ProfileNick {
+export interface MyProfileInfo {
   profileThumbURL: string;
   profileURL: string;
   userId: string;

@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { faArrowLeft, faLock } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faLockOpen, faUnlock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useAuth } from "../../contexts/AuthContext";
-import { profile } from "../../api";
+import { getProfile } from "../../api/profile";
+import type { MyProfileInfo } from "../../api/types";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -12,18 +12,75 @@ const Profile = () => {
   const [lock, unlock] = useState(false);
   const userId = localStorage.getItem("userId");
 
-  const [nickname, setNickname] = useState("");
+  const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   const goBack = () => {
     navigate(-1);
   };
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        const response = await getProfile();
+        
+        if (response.isSuccess && response.payload) {
+          setProfileData(response.payload);
+        } else {
+          setError(response.message || "프로필을 불러올 수 없습니다.");
+        }
+      } catch (err) {
+        console.error("프로필 로딩 실패:", err);
+        setError("프로필을 불러오는 중 오류가 발생했습니다.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
+  }, []);
+  if (loading) {
+    return (
+      <div className="profile-box">
+        <div className="profile-header">
+          <button onClick={goBack}>
+            <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
+          </button>
+          <div className="profile-userid">로딩 중...</div>
+        </div>
+        <div className="flex justify-center items-center h-64">
+          <div>프로필을 불러오는 중...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="profile-box">
+        <div className="profile-header">
+          <button onClick={goBack}>
+            <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
+          </button>
+          <div className="profile-userid">오류</div>
+        </div>
+        <div className="flex justify-center items-center h-64">
+          <div className="text-red-500">{error}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-box">
       <div className="profile-header">
         <button onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
         </button>
-        <div className="profile-userid">{userId}</div>
+        <div className="profile-userid">{profileData?.userId || userId}</div>
         <button type="button" onClick={() => unlock((prev) => !prev)}>
           <FontAwesomeIcon
             className="profile-icon ml-4"
@@ -34,31 +91,34 @@ const Profile = () => {
       <div className="profile-info">
         <img
           className="profile-img"
-          src="https://placehold.co/600x400.png"
-        ></img>
+          src={profileData?.profileURL || "https://placehold.co/600x400.png"}
+          alt="프로필 이미지"
+        />
         <div className="profile-count">
           <span>
-            <div>16</div>
+            <div>{profileData?.postCount || 0}</div>
             <div className="profile-count-text">게시글</div>
           </span>
           <span>
-            <div>7</div>
+            <div>{profileData?.productCount || 0}</div>
             <div className="profile-count-text">중고거래</div>
           </span>
           <span>
-            <div>34</div>
+            <div>{profileData?.followedCount || 0}</div>
             <div className="profile-count-text">팔로워</div>
           </span>
           <span>
-            <div>27</div>
+            <div>{profileData?.followCount || 0}</div>
             <div className="profile-count-text">팔로우</div>
           </span>
         </div>
       </div>
       <div className="profile-sell">
-        <div>후기후기후기후기휘기후기1</div>
-        <div>후기후기후기후기휘기후기2</div>
-        <div>후기후기후기후기휘기후기3</div>
+        {profileData?.profileMessage ? (
+          <div>{profileData.profileMessage}</div>
+        ) : (
+          <div>프로필 메시지가 없습니다.</div>
+        )}
       </div>
       <div className="profile-feed-box">
         <div className="flex">

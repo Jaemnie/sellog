@@ -71,7 +71,7 @@ function App() {
 
           {/* 전역 Toast Container */}
           <ToastContainer
-            position="top-center"
+            position="bottom-right"
             autoClose={2000}
             hideProgressBar={false}
             newestOnTop
