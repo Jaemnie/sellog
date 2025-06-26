@@ -8,7 +8,6 @@ import { useAuth } from "./contexts/AuthContext";
 export const RequireAuth = ({ children }: { children: JSX.Element }) => {
   const navigate = useNavigate();
   const { isLoggedin } = useAuth();
-
   useEffect(() => {
     if (!isLoggedin) {
       toast.error("로그인이 필요한 서비스입니다.", {
@@ -18,10 +17,10 @@ export const RequireAuth = ({ children }: { children: JSX.Element }) => {
       navigate("/login", { replace: true });
     }
   }, [isLoggedin, navigate]);
-  
+
   if (!isLoggedin) {
     return null;
   }
-  
+
   return children;
-}; 
+};

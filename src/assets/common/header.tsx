@@ -13,7 +13,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
 
   const handleMyPage = async () => {
     // await logout();
-    navigate("/myprofile");
+    navigate("/profile");
   };
 
   const headerStyles = {
@@ -69,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
               채팅
             </button>
             <button
-              onClick={isLoggedin ? handleMyPage : () => navigate("/myprofile")}
+              onClick={isLoggedin ? handleMyPage : () => navigate("/profile")}
               className="btn btn-primary text-sm"
             >
               {isLoggedin ? "내 프로필" : "로그인"}
@@ -140,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
               채팅
             </button>
             <button
-              onClick={isLoggedin ? handleMyPage : () => navigate("/myprofile")}
+              onClick={isLoggedin ? handleMyPage : () => navigate("/profile")}
               className="btn btn-primary w-full mt-2"
             >
               {isLoggedin ? "내 프로필" : "로그인"}

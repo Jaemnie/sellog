@@ -8,6 +8,7 @@
   --color-primary-hover: #d97706;
   --color-primary-light: #fbbf24;
   --color-profile-box: #fee9b3;
+  --color-setting-btn: #f9ce84;
 
   /* 배경색 - 더 부드러운 크림/오프화이트 톤 */
   --color-background: #fefcf3;
@@ -186,7 +187,9 @@ a:hover {
   color: var(--color-primary-hover);
   text-decoration: underline;
 }
-
+button {
+  cursor: pointer;
+}
 /* 버튼 공통 스타일 */
 .btn {
   display: inline-flex;
@@ -802,7 +805,7 @@ a:hover {
   font-size: 32px;
   margin-top: 5px;
 }
-.profile-userid {
+.profile-header-text {
   margin-left: 15px;
   font-size: 27px;
   justify-content: center;
@@ -818,7 +821,6 @@ a:hover {
 .profile-img {
   height: 100px;
   width: 100px;
-  margin-right: 40px;
   border-radius: 50%;
 }
 .profile-count {
@@ -837,14 +839,23 @@ a:hover {
 .profile-count-text {
   padding-top: 6px;
 }
+.profile-sell-box {
+  display: flex;
+  justify-content: center;
+}
 .profile-sell {
   border: solid 2px;
   border-radius: 10px;
   border-color: var(--color-primary);
-  margin: 15px auto;
   max-height: 110px;
   max-width: 500px;
+  width: 450px;
   padding: 15px;
+  margin: 15px;
+}
+.profile-setting {
+  color: var(--color-primary);
+  cursor: pointer;
 }
 .profile-feed-box {
   margin: auto;
@@ -867,6 +878,39 @@ a:hover {
 }
 .profile-feed {
   margin: 10px;
+}
+.profile-imgbox {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+.profile-myinfo {
+  display: flex;
+  margin: 40px auto;
+  max-width: 400px;
+}
+.profile-content {
+  padding: 10px;
+}
+.profile-title {
+  width: 100px;
+  text-align: left;
+  padding: 9px;
+}
+.profile-line {
+  text-align: center;
+  border: 1px solid var(--color-primary);
+  margin: 20px 0;
+}
+.profile-update {
+  text-align: left;
+  padding: 9px;
+}
+.profile-setting-btn {
+  padding: 8px 55px;
+  background-color: var(--color-setting-btn);
+  border-radius: 17px;
 }
 /* 반응형 디자인 */
 @media (max-width: 768px) {

@@ -13,6 +13,8 @@ import FindId from "./pages/auth/findId";
 import ForgotPw from "./pages/auth/forgotPw";
 
 import Profile from "./assets/common/profile";
+import Myprofile from "./assets/common/myprofile";
+
 function App() {
   return (
     <div
@@ -60,10 +62,18 @@ function App() {
               }
             />
             <Route
-              path="/myprofile"
+              path="/profile"
               element={
                 <RequireAuth>
                   <Profile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/myprofile"
+              element={
+                <RequireAuth>
+                  <Myprofile />
                 </RequireAuth>
               }
             />

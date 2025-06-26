@@ -1,17 +1,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
-import { faLockOpen, faUnlock } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { getProfile } from "../../api/profile";
+
+import { getMyProfile } from "../../api/profile";
 import type { MyProfileInfo } from "../../api/types";
 
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faLockOpen,
+  faUnlock,
+  faGear,
+} from "@fortawesome/free-solid-svg-icons";
 const Profile = () => {
   const navigate = useNavigate();
   const [selected, setselected] = useState<"left" | "right">("left");
   const [lock, unlock] = useState(false);
   const userId = localStorage.getItem("userId");
 
+  const [nickname, setNickname] = useState("");
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -19,14 +25,13 @@ const Profile = () => {
   const goBack = () => {
     navigate(-1);
   };
-
   useEffect(() => {
     const fetchProfile = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await getProfile();
-        
+        const response = await getMyProfile();
+
         if (response.isSuccess && response.payload) {
           setProfileData(response.payload);
         } else {
@@ -49,7 +54,7 @@ const Profile = () => {
           <button onClick={goBack}>
             <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
           </button>
-          <div className="profile-userid">로딩 중...</div>
+          <div className="profile-header-text">로딩 중...</div>
         </div>
         <div className="flex justify-center items-center h-64">
           <div>프로필을 불러오는 중...</div>
@@ -65,7 +70,7 @@ const Profile = () => {
           <button onClick={goBack}>
             <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
           </button>
-          <div className="profile-userid">오류</div>
+          <div className="profile-header-text">오류</div>
         </div>
         <div className="flex justify-center items-center h-64">
           <div className="text-red-500">{error}</div>
@@ -80,7 +85,9 @@ const Profile = () => {
         <button onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
         </button>
-        <div className="profile-userid">{profileData?.userId || userId}</div>
+        <div className="profile-header-text">
+          {profileData?.nickname || nickname}
+        </div>
         <button type="button" onClick={() => unlock((prev) => !prev)}>
           <FontAwesomeIcon
             className="profile-icon ml-4"
@@ -90,7 +97,7 @@ const Profile = () => {
       </div>
       <div className="profile-info">
         <img
-          className="profile-img"
+          className="profile-img mr-4"
           src={profileData?.profileURL || "https://placehold.co/600x400.png"}
           alt="프로필 이미지"
         />
@@ -113,13 +120,22 @@ const Profile = () => {
           </span>
         </div>
       </div>
-      <div className="profile-sell">
-        {profileData?.profileMessage ? (
-          <div>{profileData.profileMessage}</div>
-        ) : (
-          <div>프로필 메시지가 없습니다.</div>
-        )}
+      <div className="profile-sell-box">
+        <div className="profile-sell">
+          {profileData?.profileMessage ? (
+            <div>{profileData.profileMessage}</div>
+          ) : (
+            <div>프로필 메시지가 없습니다.</div>
+          )}
+        </div>
+        <button
+          className="profile-setting"
+          onClick={() => navigate("/myprofile")}
+        >
+          <FontAwesomeIcon icon={faGear} className="profile-icon" />
+        </button>
       </div>
+
       <div className="profile-feed-box">
         <div className="flex">
           <button
