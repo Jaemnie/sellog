@@ -17,7 +17,6 @@ const Profile = () => {
   const [lock, unlock] = useState(false);
   const userId = localStorage.getItem("userId");
 
-  const [nickname, setNickname] = useState("");
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,9 +84,7 @@ const Profile = () => {
         <button onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
         </button>
-        <div className="profile-header-text">
-          {profileData?.nickname || nickname}
-        </div>
+        <div className="profile-header-text">{profileData?.nickname}</div>
         <button type="button" onClick={() => unlock((prev) => !prev)}>
           <FontAwesomeIcon
             className="profile-icon ml-4"

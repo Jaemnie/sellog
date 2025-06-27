@@ -32,9 +32,9 @@ const Myprofile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [genderCk] = useState([
-    { label: "남자", value: "남자" },
-    { label: "여자", value: "여자" },
-    { label: "미공개", value: " 미공개" },
+    { label: "남자", value: "male" },
+    { label: "여자", value: "female" },
+    { label: "미공개", value: " hidden" },
   ]);
   const [selectGender, setselectGender] = useState("");
   const goBack = () => {
@@ -67,6 +67,7 @@ const Myprofile = () => {
       if (username === "") setUserName(profileData.userName || "");
       if (nickname === "") setNickName(profileData.nickname || "");
       // if (gender === "") setGender(profileData.gender || "");
+      if (birthDay === "") setBirthDay(profileData.birthDay || "");
       if (email === "") setEmail(profileData.email || "");
       if (profileMessage === "")
         setProfileMessage(profileData.profileMessage || "");
@@ -178,7 +179,7 @@ const Myprofile = () => {
             maxDate={new Date()}
             onChange={(date) => setBirth(date)}
             withPortal
-            readOnly
+            onKeyDown={(e) => e.preventDefault()}
             renderCustomHeader={({
               date,
               changeYear,

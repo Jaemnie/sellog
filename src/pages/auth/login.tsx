@@ -12,16 +12,27 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { login: updateAuthState } = useAuth();
 
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState<LoginRequest>({
+    userId: "",
+    password: "",
+  });
+
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   useEffect(() => {
     const accessToken = sessionStorage.getItem("accessToken");
     if (accessToken) navigate("/home");
   });
   const handleLogin = async () => {
-    if (!userId.trim()) {
+    if (!loginData?.userId.trim()) {
       toast.error("아이디를 입력해주세요.", {
         toastId: "login-id-error",
         autoClose: 2000,
@@ -29,7 +40,7 @@ const Login: React.FC = () => {
       return;
     }
 
-    if (!password.trim()) {
+    if (!loginData?.password.trim()) {
       toast.error("비밀번호를 입력해주세요.", {
         toastId: "login-password-error",
         autoClose: 2000,
@@ -38,10 +49,6 @@ const Login: React.FC = () => {
     }
 
     try {
-      const loginData: LoginRequest = {
-        userId: userId.trim(),
-        password: password.trim(),
-      };
       const response = await login(loginData);
 
       if (response.isSuccess && response.payload) {
@@ -74,20 +81,22 @@ const Login: React.FC = () => {
       <div className="card-logo">SelLog</div>
       <div className="card">
         <input
+          name="userId"
           className="auth-input"
           type="text"
           placeholder="아이디"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          value={loginData?.userId}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleLogin()}
         />
         <div className="relative">
           <input
+            name="password"
             className="auth-input"
             type={showPassword ? "text" : "password"}
             placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={loginData?.password}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleLogin()}
           />
           <button

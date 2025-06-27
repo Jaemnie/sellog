@@ -3,33 +3,43 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import {
-  signUp,
-  checkDuplicate,
-  type SignUpRequest,
-} from "../../api";
+import { signUp, checkDuplicate, type SignUpRequest } from "../../api";
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [nickname, setNickname] = useState("");
-  const [userId, setUserId] = useState("");
-  const [password, setPassword] = useState("");
+
+  const [signup, setsingup] = useState<SignUpRequest>({
+    name: "",
+    nickname: "",
+    userId: "",
+    password: "",
+    email: "",
+  });
+
   const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
 
-  const handleUserIdChange = (value: string) => {
-    setUserId(value);
+  // const handleUserIdChange = (value: string) => {
+  //   setUserId(value);
+  //   setIsDuplicateChecked(false);
+  // };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setsingup((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
     setIsDuplicateChecked(false);
   };
 
   const handleDuplicateCheck = async () => {
-    if (!userId.trim()) {
+    if (!signup.userId.trim()) {
       toast.error("아이디를 입력해주세요.", {
         toastId: "signup-userid-error",
         autoClose: 2000,
@@ -39,7 +49,7 @@ const SignUp: React.FC = () => {
 
     setIsCheckingDuplicate(true);
     try {
-      const response = await checkDuplicate({ userId });
+      const response = await checkDuplicate({ userId: signup.userId });
 
       if (response.isSuccess) {
         setIsDuplicateChecked(true);
@@ -67,38 +77,59 @@ const SignUp: React.FC = () => {
   };
 
   const handleSignUp = async () => {
-    if (!name.trim()) {
-      toast.error("이름을 입력해주세요.", { toastId: "signup-name-error", autoClose: 2000 });
+    if (!signup?.name.trim()) {
+      toast.error("이름을 입력해주세요.", {
+        toastId: "signup-name-error",
+        autoClose: 2000,
+      });
       return;
     }
 
-    if (!nickname.trim()) {
-      toast.error("닉네임을 입력해주세요.", { toastId: "signup-nickname-error", autoClose: 2000 });
+    if (!signup?.nickname.trim()) {
+      toast.error("닉네임을 입력해주세요.", {
+        toastId: "signup-nickname-error",
+        autoClose: 2000,
+      });
       return;
     }
 
-    if (!userId.trim()) {
-      toast.error("아이디를 입력해주세요.", { toastId: "signup-userid-error", autoClose: 2000 });
+    if (!signup?.userId.trim()) {
+      toast.error("아이디를 입력해주세요.", {
+        toastId: "signup-userid-error",
+        autoClose: 2000,
+      });
       return;
     }
 
-    if (!password.trim()) {
-      toast.error("비밀번호를 입력해주세요.", { toastId: "signup-password-error", autoClose: 2000 });
+    if (!signup?.password.trim()) {
+      toast.error("비밀번호를 입력해주세요.", {
+        toastId: "signup-password-error",
+        autoClose: 2000,
+      });
       return;
     }
 
-    if (password !== passwordConfirm) {
-      toast.error("비밀번호가 일치하지 않습니다.", { toastId: "signup-password-mismatch", autoClose: 2000 });
+    if (signup?.password !== passwordConfirm) {
+      toast.error("비밀번호가 일치하지 않습니다.", {
+        toastId: "signup-password-mismatch",
+        autoClose: 2000,
+      });
       return;
     }
 
-    if (!email.trim()) {
-      toast.error("이메일을 입력해주세요.", { toastId: "signup-email-error", autoClose: 2000 });
+    if (!signup?.email.trim()) {
+      toast.error("이메일을 입력해주세요.", {
+        toastId: "signup-email-error",
+        autoClose: 2000,
+      });
       return;
     }
 
     if (!isDuplicateChecked) {
-      toast.info("아이디 중복검사를 해주세요.", { toastId: "signup-duplicate-check", autoClose: 2000 });
+      toast.info("아이디 중복검사를 해주세요.", {
+        toastId: "signup-duplicate-check",
+        autoClose: 2000,
+      });
       return;
     }
 
@@ -106,11 +137,11 @@ const SignUp: React.FC = () => {
 
     try {
       const signUpData: SignUpRequest = {
-        name: name.trim(),
-        nickname: nickname.trim(),
-        userId: userId.trim(),
-        password: password.trim(),
-        email: email.trim(),
+        name: signup.name.trim(),
+        nickname: signup.nickname.trim(),
+        userId: signup.userId.trim(),
+        password: signup.password.trim(),
+        email: signup.email.trim(),
       };
 
       const response = await signUp(signUpData);
@@ -129,7 +160,10 @@ const SignUp: React.FC = () => {
       }
     } catch (error) {
       console.error("회원가입 오류:", error);
-      const errorMessage = error instanceof Error ? error.message : "회원가입 중 오류가 발생했습니다.";
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다.";
       toast.error(errorMessage, { toastId: "signup-error", autoClose: 3000 });
     } finally {
       setIsSigningUp(false);
@@ -141,28 +175,31 @@ const SignUp: React.FC = () => {
       <div className="card-logo">SelLog</div>
       <div className="card">
         <input
+          name="name"
           className="auth-input"
           type="text"
           placeholder="이름"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={signup?.name}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
         />
         <input
+          name="nickname"
           className="auth-input"
           type="text"
           placeholder="닉네임"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value)}
+          value={signup?.nickname}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
         />
         <div className="relative w-full">
           <input
+            name="userId"
             className="auth-input w-full"
             type="text"
             placeholder="아이디"
-            value={userId}
-            onChange={(e) => handleUserIdChange(e.target.value)}
+            value={signup?.userId}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleDuplicateCheck()}
           />
           <button
@@ -176,11 +213,12 @@ const SignUp: React.FC = () => {
         </div>
         <div className="relative">
           <input
+            name="password"
             className="auth-input"
             type={showPassword ? "text" : "password"}
             placeholder="비밀번호"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            value={signup?.password}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
           />
           <button
@@ -210,11 +248,12 @@ const SignUp: React.FC = () => {
         </div>
 
         <input
+          name="email"
           className="auth-input mb-4"
           type="email"
           placeholder="이메일"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={signup?.email}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
         />
 
