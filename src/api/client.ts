@@ -14,7 +14,7 @@ function notifyAuthStateChange() {
   window.dispatchEvent(
     new StorageEvent("storage", {
       key: "accessToken",
-      newValue: localStorage.getItem("accessToken"),
+      newValue: sessionStorage.getItem("accessToken"),
       url: window.location.href,
     })
   );
@@ -27,7 +27,7 @@ async function tryRefreshToken(): Promise<boolean> {
   try {
     const response = await refreshToken();
     if (response.isSuccess && response.payload) {
-      localStorage.setItem("accessToken", response.payload.accessToken);
+      sessionStorage.setItem("accessToken", response.payload.accessToken);
       notifyAuthStateChange();
       return true;
     }
@@ -46,11 +46,11 @@ async function refreshToken(): Promise<ApiResponse<AuthTokens>> {
 }
 
 export function isAuthenticated(): boolean {
-  return !!localStorage.getItem("accessToken");
+  return !!sessionStorage.getItem("accessToken");
 }
 
 export function getAccessToken(): string | null {
-  return localStorage.getItem("accessToken");
+  return sessionStorage.getItem("accessToken");
 }
 
 // ============================
@@ -60,7 +60,7 @@ export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
-  const token = localStorage.getItem("accessToken");
+  const token = sessionStorage.getItem("accessToken");
 
   const defaultHeaders: Record<string, string> = {
     "Content-Type": "application/json",
@@ -88,7 +88,7 @@ export async function apiFetch<T>(
       const refreshed = await tryRefreshToken();
       if (refreshed) {
         // 토큰 재발급 성공 시 재시도
-        const newToken = localStorage.getItem("accessToken");
+        const newToken = sessionStorage.getItem("accessToken");
         config.headers = {
           ...config.headers,
           Authorization: `Bearer ${newToken}`,
@@ -97,7 +97,7 @@ export async function apiFetch<T>(
         return (await retryResponse.json()) as T;
       }
       // 토큰 재발급 실패 시 로그인 페이지로 리다이렉트
-      localStorage.removeItem("accessToken");
+      sessionStorage.removeItem("accessToken");
       notifyAuthStateChange();
       window.location.href = "/login";
       throw new Error("Authentication failed");

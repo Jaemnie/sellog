@@ -17,7 +17,7 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem("accessToken");
     if (accessToken) navigate("/home");
   });
   const handleLogin = async () => {
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
       const response = await login(loginData);
 
       if (response.isSuccess && response.payload) {
-        localStorage.setItem("accessToken", response.payload.accessToken);
+        sessionStorage.setItem("accessToken", response.payload.accessToken);
         updateAuthState();
         toast.success("로그인 성공!", {
           toastId: "login-success",

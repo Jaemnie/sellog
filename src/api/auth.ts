@@ -18,7 +18,7 @@ function notifyAuthStateChange() {
   window.dispatchEvent(
     new StorageEvent("storage", {
       key: "accessToken",
-      newValue: localStorage.getItem("accessToken"),
+      newValue: sessionStorage.getItem("accessToken"),
       url: window.location.href,
     })
   );
@@ -44,11 +44,11 @@ export async function login(
     body: JSON.stringify(userData),
   });
 
-  // 로그인 성공 시 accessToken만 localStorage에 저장
+  // 로그인 성공 시 accessToken만 sessionStorage 저장
   // refreshToken은 서버에서 httpOnly 쿠키로 설정됨
   if (response.isSuccess && response.payload) {
-    localStorage.setItem("accessToken", response.payload.accessToken);
-    localStorage.setItem("userId", userData.userId);
+    sessionStorage.setItem("accessToken", response.payload.accessToken);
+    sessionStorage.setItem("userId", userData.userId);
     console.log(userData.userId);
     notifyAuthStateChange();
   }
@@ -91,10 +91,9 @@ export async function logout(): Promise<void> {
   } catch (error) {
     console.error("로그아웃 API 요청 실패:", error);
   } finally {
-    // accessToken만 localStorage에서 제거
+    // accessToken만 sessionStorage 제거
     // refreshToken은 서버에서 쿠키 삭제 처리
-    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
     notifyAuthStateChange();
   }
 }
-

@@ -6,7 +6,7 @@ import type { ApiResponse, MyProfileInfo } from "./types";
 // 프로필 API 함수들
 // ============================
 export async function getMyProfile(): Promise<ApiResponse<MyProfileInfo>> {
-  const userId = localStorage.getItem("userId");
+  const userId = sessionStorage.getItem("userId");
   if (!userId) {
     throw new Error("로그인이 필요합니다.");
   }
@@ -23,7 +23,7 @@ export async function getMyProfile(): Promise<ApiResponse<MyProfileInfo>> {
 export async function updateMyProfile(
   userData: MyProfileInfo
 ): Promise<ApiResponse<MyProfileInfo>> {
-  const userId = localStorage.getItem("userId");
+  const userId = sessionStorage.getItem("userId");
   if (!userId) {
     throw new Error("로그인이 필요합니다.");
   }
@@ -31,6 +31,9 @@ export async function updateMyProfile(
     `/api/${userId}/profile`,
     {
       method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(userData),
     }
   );

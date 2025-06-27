@@ -12,14 +12,13 @@ import { ko } from "date-fns/locale/ko";
 registerLocale("ko", ko);
 const Myprofile = () => {
   const navigate = useNavigate();
-
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [profileThumbURL, setProfileThumbURL] = useState("");
   const [profileURL, setProfileURL] = useState("");
   const [userId, setUserId] = useState("");
   const [username, setUserName] = useState("");
   const [nickname, setNickName] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState<string | null>(null);
   const [profileMessage, setProfileMessage] = useState("");
   const [birthDay, setBirthDay] = useState("");
   const [email, setEmail] = useState("");
@@ -80,29 +79,34 @@ const Myprofile = () => {
     setNickName(filtered);
   };
   const handleSave = async () => {
-    const updatedData: MyProfileInfo = {
-      userId,
-      userName: username,
-      nickname,
-      gender,
-      profileMessage,
-      birthDay,
-      email,
-      phoneNumber,
-      userAddress,
-      profileThumbURL,
-      profileURL,
-      productCount,
-      score,
-      postCount,
-      followCount,
-      followedCount,
-    };
-
-    const response = await updateMyProfile(updatedData);
-    if (response.isSuccess) {
-      alert("프로필이 성공적으로 수정되었습니다!");
-    } else alert("프로필 수정 실패");
+    try {
+      const userId = sessionStorage.getItem("userId") ?? "";
+      const userData: MyProfileInfo = {
+        userId,
+        userName: username,
+        nickname,
+        gender,
+        profileMessage,
+        birthDay,
+        email,
+        phoneNumber,
+        userAddress,
+        profileThumbURL,
+        profileURL,
+        productCount,
+        score,
+        postCount,
+        followCount,
+        followedCount,
+      };
+      console.log(userData);
+      const response = await updateMyProfile(userData);
+      if (response.isSuccess) {
+        alert("프로필이 성공적으로 수정되었습니다!");
+      } else alert("프로필 수정을 할 수 없습니다.");
+    } catch (err) {
+      console.error("프로필 수정 실패 :", err);
+    }
   };
 
   return (
