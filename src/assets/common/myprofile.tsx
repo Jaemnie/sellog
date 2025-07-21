@@ -97,8 +97,11 @@ const Myprofile = () => {
     }));
   };
   const handleSave = async () => {
-    if (myprofile?.phoneNumber.length !== 11) {
-      toast.error("숫자로만 11자리 입력해주세요.");
+    if (myprofile?.phoneNumber) {
+      if (myprofile?.phoneNumber.length !== 11) {
+        toast.error("숫자로만 11자리 입력해주세요.");
+        return;
+      }
     } else {
       try {
         const userId = sessionStorage.getItem("userId") ?? "";
