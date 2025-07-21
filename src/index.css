@@ -1,6 +1,9 @@
 @import "tailwindcss";
 @import "react-toastify/dist/ReactToastify.css";
 
+.min-h-screen {
+  min-height: auto;
+}
 /* CSS 변수 정의 - 라이트모드 */
 :root {
   /* 컬러 시스템 - 더 부드러운 노란색 톤 */
@@ -911,6 +914,30 @@ button {
   padding: 8px 55px;
   background-color: var(--color-setting-btn);
   border-radius: 17px;
+}
+/* 채팅방 디자인*/
+.chat-box {
+  margin: 70px auto;
+  width: 500px;
+  max-width: 80vw;
+  flex-direction: column;
+  border: solid 1px var(--color-primary-light);
+  border-radius: 10px;
+  padding: 20px;
+  height: 700px;
+  max-height: 90vh;
+}
+.chat-btn-left {
+  display: flex;
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
+  padding: 5px 15px;
+}
+.chat-btn-right {
+  display: flex;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  padding: 5px 15px;
 }
 /* 반응형 디자인 */
 @media (max-width: 768px) {

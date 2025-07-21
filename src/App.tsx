@@ -35,7 +35,7 @@ function App() {
             <Route path="/signUp" element={<SignUp />}></Route>
             <Route path="/findId" element={<FindId />}></Route>
             <Route path="/forgotPw" element={<ForgotPw />}></Route>
-
+            <Route path="/chatList" element={<ChatList />}></Route>
             {/* 비공개 라우트 */}
             <Route
               path="/home"
@@ -53,14 +53,14 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route
+            {/* <Route
               path="/chatList"
               element={
                 <RequireAuth>
                   <ChatList />
                 </RequireAuth>
               }
-            />
+            /> */}
             <Route
               path="/profile"
               element={

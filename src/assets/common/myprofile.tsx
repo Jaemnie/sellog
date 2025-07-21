@@ -5,6 +5,7 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
 import { getMyProfile, updateMyProfile } from "../../api/profile";
 import { type MyProfileInfo } from "../../api/types";
+import { toast } from "react-toastify";
 
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -12,23 +13,26 @@ import { ko } from "date-fns/locale/ko";
 registerLocale("ko", ko);
 const Myprofile = () => {
   const navigate = useNavigate();
-  const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
-  const [profileThumbURL, setProfileThumbURL] = useState("");
-  const [profileURL, setProfileURL] = useState("");
-  const [userId, setUserId] = useState("");
-  const [username, setUserName] = useState("");
-  const [nickname, setNickName] = useState("");
-  const [gender, setGender] = useState<string | null>(null);
-  const [profileMessage, setProfileMessage] = useState("");
-  const [birthDay, setBirthDay] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [userAddress, setUserAddress] = useState("");
-  const [score, setScore] = useState(0);
-  const [postCount, setPostCount] = useState(0);
-  const [productCount, setProductCount] = useState(0);
-  const [followCount, setFollowCount] = useState(0);
-  const [followedCount, setFollowedCount] = useState(0);
+  const [myprofile, setMyprofile] = useState<MyProfileInfo>({
+    profileThumbURL: "",
+    profileURL: "",
+    userId: "",
+    userName: "",
+    nickname: "",
+    gender: "",
+    profileMessage: "",
+    birthDay: "",
+    email: "",
+    phoneNumber: "",
+    userAddress: "",
+    score: 0,
+    postCount: 0,
+    productCount: 0,
+    followCount: 0,
+    followedCount: 0,
+  });
+  //const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [genderCk] = useState([
@@ -49,7 +53,7 @@ const Myprofile = () => {
         setError(null);
         const response = await getMyProfile();
         if (response.isSuccess && response.payload) {
-          setProfileData(response.payload);
+          setMyprofile(response.payload);
         } else {
           setError(response.message || "개인정보를 불러올 수 없습니다.");
         }
@@ -63,50 +67,51 @@ const Myprofile = () => {
     fetchProfile();
   }, []);
   useEffect(() => {
-    if (profileData) {
-      if (username === "") setUserName(profileData.userName || "");
-      if (nickname === "") setNickName(profileData.nickname || "");
-      // if (gender === "") setGender(profileData.gender || "");
-      if (birthDay === "") setBirthDay(profileData.birthDay || "");
-      if (email === "") setEmail(profileData.email || "");
-      if (profileMessage === "")
-        setProfileMessage(profileData.profileMessage || "");
-      if (phoneNumber === "") setPhoneNumber(profileData.phoneNumber || "");
+    if (myprofile) {
+      setMyprofile((prev) => ({
+        ...prev,
+        userName: prev.userName || "",
+        nickname: prev.nickname || "",
+        birthDay: prev.birthDay || "",
+        email: prev.email || "",
+        profileMessage: prev.profileMessage || "",
+        phoneNumber: prev.phoneNumber || "",
+        profileThumbURL: prev.profileThumbURL || "",
+      }));
     }
-  }, [profileData]);
+  }, []);
+
   const notKo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
     const filtered = input.replace(/[^a-zA-Z0-9]/g, "");
-    setNickName(filtered);
+    setMyprofile((prev) => ({
+      ...prev,
+      nickname: filtered,
+    }));
+  };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setMyprofile((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
   const handleSave = async () => {
-    try {
-      const userId = sessionStorage.getItem("userId") ?? "";
-      const userData: MyProfileInfo = {
-        userId,
-        userName: username,
-        nickname,
-        gender,
-        profileMessage,
-        birthDay,
-        email,
-        phoneNumber,
-        userAddress,
-        profileThumbURL,
-        profileURL,
-        productCount,
-        score,
-        postCount,
-        followCount,
-        followedCount,
-      };
-      console.log(userData);
-      const response = await updateMyProfile(userData);
-      if (response.isSuccess) {
-        alert("프로필이 성공적으로 수정되었습니다!");
-      } else alert("프로필 수정을 할 수 없습니다.");
-    } catch (err) {
-      console.error("프로필 수정 실패 :", err);
+    if (myprofile?.phoneNumber.length !== 11) {
+      toast.error("숫자로만 11자리 입력해주세요.");
+    } else {
+      try {
+        const userId = sessionStorage.getItem("userId") ?? "";
+
+        console.log(myprofile);
+        const response = await updateMyProfile(myprofile);
+
+        if (response.isSuccess) {
+          toast.success("프로필이 성공적으로 수정되었습니다!");
+        } else alert("프로필 수정을 할 수 없습니다.");
+      } catch (err) {
+        toast.error("프로필 수정 실패 :", err);
+      }
     }
   };
 
@@ -145,11 +150,18 @@ const Myprofile = () => {
         <div className="profile-line"></div>
         <div className="profile-content">
           <input
+            name="userId"
             className="profile-update"
-            value={username}
-            onChange={(e) => setUserName(e.target.value)}
+            value={myprofile?.userName}
+            onChange={handleChange}
           />
-          <input className="profile-update" value={nickname} onInput={notKo} />
+          <input
+            name="nickname"
+            className="profile-update"
+            value={myprofile?.nickname}
+            onChange={handleChange}
+            onInput={notKo}
+          />
           <select
             className="profile-update"
             value={selectGender}
@@ -163,10 +175,11 @@ const Myprofile = () => {
             ))}
           </select>
           <input
+            name="profileMessage"
             type="text"
             className="profile-update w-5/6"
-            value={profileMessage}
-            onChange={(e) => setProfileMessage(e.target.value)}
+            value={myprofile?.profileMessage}
+            onChange={handleChange}
           />
           <DatePicker
             className="profile-update"
@@ -235,15 +248,16 @@ const Myprofile = () => {
             )}
           />
           <input
+            name="email"
             readOnly
             className="profile-update bg-gray-200 rounded-3xl"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={myprofile?.email}
           />
           <input
+            name="phoneNumber"
             className="profile-update"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            value={myprofile?.phoneNumber}
+            onChange={handleChange}
           />
         </div>
       </label>

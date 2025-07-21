@@ -5,21 +5,28 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
-import {
-  forgotPassword,
-  type ForgotPasswordRequest,
-} from "../../api";
+import { forgotPassword, type ForgotPasswordRequest } from "../../api";
 
 const ForgotPw: React.FC = () => {
   const navigate = useNavigate();
 
   // 입력 상태 관리
-  const [userId, setUserId] = useState("");
-  const [email, setEmail] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
 
+  const [forgotPw, setforgotPw] = useState<ForgotPasswordRequest>({
+    id: "",
+    email: "",
+    password: "",
+    passwordCk: "",
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setforgotPw((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
   // UI 상태 관리
   const [isVerificationVisible, setIsVerificationVisible] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -93,17 +100,17 @@ const ForgotPw: React.FC = () => {
 
   // 이메일 인증 전송
   const handleSendVerification = () => {
-    if (!userId.trim()) {
+    if (!forgotPw?.id.trim()) {
       notifyEmptyUserId();
       return;
     }
 
-    if (!email.trim()) {
+    if (!forgotPw?.email.trim()) {
       notifyEmptyEmail();
       return;
     }
 
-    if (!isValidEmail(email)) {
+    if (!isValidEmail(forgotPw?.email)) {
       notifyInvalidEmail();
       return;
     }
@@ -146,22 +153,22 @@ const ForgotPw: React.FC = () => {
       return;
     }
 
-    if (!newPassword.trim()) {
+    if (!forgotPw?.passwordCk.trim()) {
       notifyEmptyPassword();
       return;
     }
 
-    if (newPassword !== newPasswordConfirm) {
+    if (forgotPw?.password !== forgotPw?.passwordCk) {
       notifyPasswordMismatch();
       return;
     }
 
     try {
       const forgotPasswordData: ForgotPasswordRequest = {
-        id: userId.trim(),
-        email: email.trim(),
-        password: newPassword.trim(),
-        passwordCk: newPasswordConfirm.trim(),
+        id: forgotPw?.id.trim(),
+        email: forgotPw?.email.trim(),
+        password: forgotPw?.password.trim(),
+        passwordCk: forgotPw?.passwordCk.trim(),
       };
 
       const response = await forgotPassword(forgotPasswordData);
@@ -191,20 +198,22 @@ const ForgotPw: React.FC = () => {
       <div className="card-logo">SelLog</div>
       <div className="card">
         <input
+          name="id"
           className="auth-input"
           type="text"
           placeholder="아이디"
-          value={userId}
-          onChange={(e) => setUserId(e.target.value)}
+          value={forgotPw?.id}
+          onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSendVerification()}
         />
         <div className="relative w-full">
           <input
+            name="email"
             className="auth-input w-full"
             type="email"
             placeholder="이메일 본인 인증"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={forgotPw?.email}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handleSendVerification()}
           />
           <button
@@ -240,11 +249,12 @@ const ForgotPw: React.FC = () => {
         </div>
         <div className="relative">
           <input
+            name="password"
             className="auth-input"
             type={showPassword ? "text" : "password"}
             placeholder="새 비밀번호 입력"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
+            value={forgotPw?.password}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handlePasswordChange()}
           />
           <button
@@ -257,11 +267,12 @@ const ForgotPw: React.FC = () => {
         </div>
         <div className="relative">
           <input
+            name="passwordCk"
             className="auth-input mb-4"
             type={showPasswordCk ? "text" : "password"}
             placeholder="새 비밀번호 확인"
-            value={newPasswordConfirm}
-            onChange={(e) => setNewPasswordConfirm(e.target.value)}
+            value={forgotPw?.passwordCk}
+            onChange={handleChange}
             onKeyPress={(e) => e.key === "Enter" && handlePasswordChange()}
           />
           <button
