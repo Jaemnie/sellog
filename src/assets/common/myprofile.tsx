@@ -36,9 +36,9 @@ const Myprofile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [genderCk] = useState([
-    { label: "남자", value: "male" },
-    { label: "여자", value: "female" },
-    { label: "미공개", value: " hidden" },
+    { label: "남자", value: "MALE" },
+    { label: "여자", value: "FEMALE" },
+    { label: "미공개", value: " NONE" },
   ]);
   const [selectGender, setselectGender] = useState("");
   const goBack = () => {
@@ -97,15 +97,13 @@ const Myprofile = () => {
     }));
   };
   const handleSave = async () => {
-    if (myprofile?.phoneNumber) {
-      if (myprofile?.phoneNumber.length !== 11) {
-        toast.error("숫자로만 11자리 입력해주세요.");
-        return;
-      }
+    const userId = sessionStorage.getItem("userId") ?? "";
+
+    if (myprofile?.phoneNumber && myprofile.phoneNumber.length !== 11) {
+      toast.error("숫자로만 11자리 입력해주세요.");
+      return;
     } else {
       try {
-        const userId = sessionStorage.getItem("userId") ?? "";
-
         console.log(myprofile);
         const response = await updateMyProfile(myprofile);
 
@@ -167,10 +165,12 @@ const Myprofile = () => {
           />
           <select
             className="profile-update"
-            value={selectGender}
-            onChange={(e) => setselectGender(e.target.value)}
+            value={myprofile.gender}
+            onChange={(e) =>
+              setMyprofile({ ...myprofile, gender: e.target.value })
+            }
           >
-            <option>성별을 선택하세요</option>
+            <option value="">성별을 선택하세요</option>
             {genderCk.map((option) => (
               <option key={option.value} value={option.value}>
                 {option.label}
