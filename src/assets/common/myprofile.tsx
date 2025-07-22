@@ -49,7 +49,6 @@ const Myprofile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        console.log(myprofile?.birthDay);
         setLoading(true);
         setError(null);
         const response = await getMyProfile();
@@ -71,24 +70,25 @@ const Myprofile = () => {
     if (myprofile) {
       setMyprofile((prev) => ({
         ...prev,
-        userName: prev.userName || "",
-        nickname: prev.nickname || "",
-        birthDay: prev.birthDay || "",
-        email: prev.email || "",
-        profileMessage: prev.profileMessage || "",
-        phoneNumber: prev.phoneNumber || "",
-        profileThumbURL: prev.profileThumbURL || "",
+        userName: myprofile.userName || "",
+        nickname: myprofile.nickname || "",
+        birthDay: myprofile.birthDay || "",
+        email: myprofile.email || "",
+        profileMessage: myprofile.profileMessage || "",
+        phoneNumber: myprofile.phoneNumber || "",
+        profileThumbURL: myprofile.profileThumbURL || "",
       }));
     }
   }, []);
 
   const notKo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const filtered = input.replace(/[^a-zA-Z0-9]/g, "");
-    setMyprofile((prev) => ({
-      ...prev,
-      nickname: filtered,
-    }));
+    const value = e.target.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
+    const valuelen = e.target.value;
+    if (valuelen.length >= 9) {
+      toast.error("닉네임은 최대 8글자까지 입력가능합니다.");
+      return;
+    }
+    setMyprofile((prev) => ({ ...prev, nickname: value }));
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -99,7 +99,12 @@ const Myprofile = () => {
   };
   const handleSave = async () => {
     const userId = sessionStorage.getItem("userId") ?? "";
+    const hasKorean = /[ㄱ-하-ㅣ가-힣]/;
 
+    if (hasKorean.test(myprofile.nickname)) {
+      toast.error("닉네임은 영어로만 입력해주세요.");
+      return;
+    }
     if (myprofile?.phoneNumber && myprofile.phoneNumber.length !== 11) {
       toast.error("숫자로만 11자리 입력해주세요.");
       return;
@@ -161,8 +166,7 @@ const Myprofile = () => {
             name="nickname"
             className="profile-update"
             value={myprofile?.nickname}
-            onChange={handleChange}
-            onInput={notKo}
+            onChange={notKo}
           />
           <select
             className="profile-update"
@@ -182,7 +186,7 @@ const Myprofile = () => {
             name="profileMessage"
             type="text"
             className="profile-update w-5/6"
-            value={myprofile?.profileMessage}
+            value={myprofile.profileMessage}
             onChange={handleChange}
           />
           <DatePicker
