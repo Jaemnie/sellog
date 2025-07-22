@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ko } from "date-fns/locale/ko";
+import { format } from "date-fns";
 registerLocale("ko", ko);
 const Myprofile = () => {
   const navigate = useNavigate();
@@ -44,11 +45,11 @@ const Myprofile = () => {
   const goBack = () => {
     navigate(-1);
   };
-  //const [birth, setBirth] = useState<Date | null>(null);
-  const [birth, setBirth] = useState(new Date());
+  const [birth, setBirth] = useState<Date | null>(null);
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        console.log(myprofile?.birthDay);
         setLoading(true);
         setError(null);
         const response = await getMyProfile();
@@ -187,13 +188,21 @@ const Myprofile = () => {
           <DatePicker
             className="profile-update"
             locale="ko"
-            selected={birth}
+            placeholderText="생년월일을 선택하시오"
             dateFormat={"yyyy년 MM월 dd일"}
             showYearDropdown
             showMonthDropdown
             dropdownMode="select"
             maxDate={new Date()}
-            onChange={(date) => setBirth(date)}
+            value={myprofile.birthDay}
+            onChange={(birth: Date | null) => {
+              const formatted = birth ? format(birth, "yyyy년 MM월 dd일") : "";
+              setBirth(birth);
+              setMyprofile({ ...myprofile, birthDay: formatted });
+              console.log("선택한 날짜:", formatted);
+              console.log("birth", birth);
+              console.log("birthDay", myprofile.birthDay);
+            }}
             withPortal
             onKeyDown={(e) => e.preventDefault()}
             renderCustomHeader={({
