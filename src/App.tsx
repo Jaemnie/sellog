@@ -14,7 +14,7 @@ import ForgotPw from "./pages/auth/forgotPw";
 
 import Profile from "./assets/common/profile";
 import Myprofile from "./assets/common/myprofile";
-
+import Navigation from "./assets/common/navigation";
 function App() {
   return (
     <div
@@ -36,6 +36,7 @@ function App() {
             <Route path="/findId" element={<FindId />}></Route>
             <Route path="/forgotPw" element={<ForgotPw />}></Route>
             <Route path="/chatList" element={<ChatList />}></Route>
+            <Route path="navigation" element={<Navigation />}></Route>
             {/* 비공개 라우트 */}
             <Route
               path="/home"

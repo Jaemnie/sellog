@@ -362,6 +362,15 @@ button {
   color: var(--color-text-muted);
 }
 
+/* Navigtion 스타일*/
+.nav-btn {
+  line-height: 50px;
+  font-size: 17px;
+}
+.nav-icon {
+  padding-right: 10px;
+  font-size: 20px;
+}
 /* Auth 페이지용 특별 스타일 */
 .auth-input {
   width: 80%;

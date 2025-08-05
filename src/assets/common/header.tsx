@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
 
+import Navigation from "./navigation";
 interface HeaderProps {
   title?: string;
 }
@@ -10,6 +13,8 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedin, logout } = useAuth();
+
+  const [navBar, setNavBar] = useState(false);
 
   const handleMyPage = async () => {
     // await logout();
@@ -39,8 +44,11 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
       className="fixed top-0 left-0 right-0 z-50 shadow-md"
       style={headerStyles}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+          <button className="text-2xl" onClick={() => setNavBar(!navBar)}>
+            <FontAwesomeIcon icon={faBars} />
+          </button>
           <div
             onClick={() => navigate("/home")}
             className="flex-shrink-0 cursor-pointer"
@@ -148,6 +156,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
           </div>
         </div>
       )}
+      <div>{navBar && <Navigation />}</div>
     </header>
   );
 };

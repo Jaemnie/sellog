@@ -39,7 +39,7 @@ const Myprofile = () => {
   const [genderCk] = useState([
     { label: "남자", value: "MALE" },
     { label: "여자", value: "FEMALE" },
-    { label: "미공개", value: " NONE" },
+    { label: "미공개", value: "NONE" },
   ]);
   const [selectGender, setselectGender] = useState("");
   const goBack = () => {
