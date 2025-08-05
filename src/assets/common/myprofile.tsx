@@ -26,11 +26,11 @@ const Myprofile = () => {
     email: "",
     phoneNumber: "",
     userAddress: "",
-    score: 0,
-    postCount: 0,
-    productCount: 0,
-    followCount: 0,
-    followedCount: 0,
+    // score: 0,
+    // postCount: 0,
+    // productCount: 0,
+    // followCount: 0,
+    // followedCount: 0,
   });
   //const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
 

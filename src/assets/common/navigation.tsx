@@ -33,6 +33,7 @@ const Navigation: React.FC = () => {
           <div className="text-left text-2xl font-bold p-4">검색</div>
           <div>
             <input
+              type="search"
               className="m-2 p-2 bg-gray-100 rounded-lg w-64"
               placeholder="검색"
             />

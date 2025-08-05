@@ -12,7 +12,7 @@ export async function getMyProfile(): Promise<ApiResponse<MyProfileInfo>> {
   }
 
   const response = await apiFetch<ApiResponse<MyProfileInfo>>(
-    `/api/${userId}/profile`,
+    `/api/profile/${userId}`,
     {
       method: "GET",
     }
@@ -27,15 +27,12 @@ export async function updateMyProfile(
   if (!userId) {
     throw new Error("로그인이 필요합니다.");
   }
-  const response = await apiFetch<ApiResponse<MyProfileInfo>>(
-    `/api/${userId}/profile`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    }
-  );
+  const response = await apiFetch<ApiResponse<MyProfileInfo>>(`/api/profile`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
   return response;
 }

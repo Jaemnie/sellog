@@ -27,15 +27,16 @@ export interface MyProfileInfo {
   email: string;
   phoneNumber: string;
   userAddress: string;
-  score: number;
-  postCount: number;
-  productCount: number;
-  followCount: number;
-  followedCount: number;
+  // score: number;
+  // postCount: number;
+  // productCount: number;
+  // followCount: number;
+  // followedCount: number;
 }
 // ============================
 // 인증 관련 타입
 // ============================
+// 회원가입
 export interface SignUpRequest {
   name: string;
   nickname: string;
@@ -44,23 +45,27 @@ export interface SignUpRequest {
   email: string;
 }
 
+//로그인
 export interface LoginRequest {
   userId: string;
   password: string;
 }
 
+//id 찾기
 export interface FindIdRequest {
   username: string;
   email: string;
 }
 
+//pw 찾기
 export interface ForgotPasswordRequest {
   id: string;
   email: string;
   password: string;
-  passwordCk: string;
+  // passwordCk: string;
 }
 
+//중복체크
 export interface DuplicateCheckRequest {
   userId: string;
 }
