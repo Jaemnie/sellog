@@ -379,7 +379,8 @@ button {
 }
 
 .navigation-search-panel {
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .navigation-search-input {
@@ -421,7 +422,7 @@ button {
   .navigation-search-panel {
     width: 280px;
   }
-  
+
   .navigation-tag {
     font-size: 0.75rem;
     padding: 0.25rem 0.75rem;
@@ -433,7 +434,7 @@ button {
     width: calc(100vw - 4rem);
     max-width: 280px;
   }
-  
+
   .navigation-sidebar {
     width: 3rem;
   }
@@ -997,6 +998,16 @@ button {
   border: 1px solid var(--color-primary);
   margin: 20px 0;
 }
+@media (prefers-color-scheme: dark) {
+  .profile-count {
+    background-color: var(--color-background-secondary);
+  }
+  .profile-feed-box {
+    background-color: var(--color-background-secondary);
+    border: 2px solid;
+    border-color: var(--color-primary);
+  }
+}
 /* 프로필 업데이트용 공통 스타일 */
 .profile-update {
   background-color: var(--color-background);
@@ -1012,8 +1023,6 @@ button {
   line-height: 1.5rem; /* 텍스트 수직 정렬 */
   width: 100%; /* 전체 너비 사용 */
 }
-
-
 
 .profile-update:read-only {
   background-color: var(--color-background-secondary);
@@ -1049,8 +1058,6 @@ button {
   background-repeat: no-repeat;
   background-size: 1.25em 1.25em;
 }
-
-
 
 /* React DatePicker 커스텀 스타일 */
 .react-datepicker-wrapper {
@@ -1454,7 +1461,7 @@ select option:disabled {
   select {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
   }
-  
+
   .profile-update-dropdown {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fbbf24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
   }
