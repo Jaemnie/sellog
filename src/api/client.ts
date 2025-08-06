@@ -23,6 +23,65 @@ function notifyAuthStateChange() {
 // ============================
 // 토큰 관련 헬퍼 함수들
 // ============================
+
+/**
+ * 토큰의 만료 시간을 반환합니다
+ */
+export function getTokenExpirationTime(): number | null {
+  const token = getAccessToken();
+  if (!token) return null;
+  
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3 || !parts[1]) return null;
+    
+    const payload = JSON.parse(atob(parts[1]));
+    return payload.exp * 1000; // 밀리초로 변환
+  } catch (error) {
+    console.error('토큰 파싱 실패:', error);
+    return null;
+  }
+}
+
+/**
+ * 토큰이 곧 만료되는지 확인합니다
+ */
+export function isTokenExpiringSoon(thresholdMinutes = 5): boolean {
+  const expirationTime = getTokenExpirationTime();
+  if (!expirationTime) return false;
+  
+  const thresholdMs = thresholdMinutes * 60 * 1000;
+  return (expirationTime - Date.now()) < thresholdMs;
+}
+
+/**
+ * 토큰이 만료되었는지 확인합니다
+ */
+export function isTokenExpired(): boolean {
+  const expirationTime = getTokenExpirationTime();
+  if (!expirationTime) return true;
+  
+  return Date.now() >= expirationTime;
+}
+
+/**
+ * 사용자 활동이 감지되었을 때 토큰 상태를 확인하고 필요시 갱신합니다
+ */
+export async function refreshTokenOnActivity(): Promise<boolean> {
+  // 토큰이 없거나 이미 만료된 경우
+  if (!getAccessToken() || isTokenExpired()) {
+    return false;
+  }
+
+  // 토큰이 곧 만료되는 경우에만 갱신
+  if (isTokenExpiringSoon()) {
+    console.log('사용자 활동 감지 - 토큰 갱신 시도');
+    return await tryRefreshToken();
+  }
+
+  return true;
+}
+
 async function tryRefreshToken(): Promise<boolean> {
   try {
     const response = await refreshToken();
@@ -60,6 +119,22 @@ export async function apiFetch<T>(
   endpoint: string,
   options: RequestInit = {}
 ): Promise<T> {
+  // 중요한 API 호출(POST, PUT, DELETE) 전에 토큰 상태 확인
+  const method = options.method?.toUpperCase();
+  const isMutationRequest = ['POST', 'PUT', 'DELETE', 'PATCH'].includes(method || 'GET');
+  
+  if (isMutationRequest && getAccessToken()) {
+    console.log(`${method} 요청 전 토큰 상태 확인`);
+    const isValid = await refreshTokenOnActivity();
+    if (!isValid && !endpoint.includes('/auth/')) {
+      // 인증 관련 엔드포인트가 아닌 경우에만 로그인 페이지로 리다이렉트
+      sessionStorage.removeItem("accessToken");
+      notifyAuthStateChange();
+      window.location.href = "/login";
+      throw new Error("Token expired - redirecting to login");
+    }
+  }
+
   const token = sessionStorage.getItem("accessToken");
 
   const defaultHeaders: Record<string, string> = {

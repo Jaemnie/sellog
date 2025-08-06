@@ -9,7 +9,7 @@ interface HeaderProps {
   title?: string;
 }
 
-const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
+const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isLoggedin, logout } = useAuth();
@@ -24,10 +24,6 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
   const headerStyles = {
     backgroundColor: "var(--color-background)",
     borderBottom: "1px solid var(--color-border)",
-  };
-
-  const titleStyles = {
-    color: "var(--color-text-primary)",
   };
 
   const linkStyles = {
@@ -54,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
             className="flex-shrink-0 cursor-pointer"
           >
             <h1
-              className="text-xl sm:text-2xl font-bold"
+              className="text-xl sm:text-2xl font-bold absolute top-4 left-20"
               style={{ color: "var(--color-primary)" }}
             >
               SL
@@ -156,7 +152,7 @@ const Header: React.FC<HeaderProps> = ({ title = "My App" }) => {
           </div>
         </div>
       )}
-      <div>{navBar && <Navigation />}</div>
+      {navBar && <Navigation />}
     </header>
   );
 };

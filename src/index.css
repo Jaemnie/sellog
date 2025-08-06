@@ -362,7 +362,7 @@ button {
   color: var(--color-text-muted);
 }
 
-/* Navigtion 스타일*/
+/* Navigation 스타일*/
 .nav-btn {
   line-height: 50px;
   font-size: 17px;
@@ -370,6 +370,73 @@ button {
 .nav-icon {
   padding-right: 10px;
   font-size: 20px;
+}
+
+/* 네비게이션 바 스타일 */
+.navigation-sidebar {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.navigation-search-panel {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.navigation-search-input {
+  background-color: var(--color-background-secondary);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-primary);
+}
+
+.navigation-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+}
+
+.navigation-recent-item {
+  transition: all 0.2s ease;
+}
+
+.navigation-recent-item:hover {
+  background-color: var(--color-background-secondary);
+  transform: translateX(4px);
+}
+
+.navigation-tag {
+  background-color: var(--color-background-secondary);
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+}
+
+.navigation-tag:hover {
+  background-color: var(--color-primary);
+  color: var(--color-background);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 네비게이션 반응형 디자인 */
+@media (max-width: 768px) {
+  .navigation-search-panel {
+    width: 280px;
+  }
+  
+  .navigation-tag {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .navigation-search-panel {
+    width: calc(100vw - 4rem);
+    max-width: 280px;
+  }
+  
+  .navigation-sidebar {
+    width: 3rem;
+  }
 }
 /* Auth 페이지용 특별 스타일 */
 .auth-input {
@@ -904,26 +971,157 @@ button {
 }
 .profile-content {
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; /* 요소들 간의 일정한 간격 */
 }
 .profile-title {
   width: 100px;
   text-align: left;
-  padding: 9px;
+  padding: 0.5rem 0.75rem;
+  height: 2.5rem; /* profile-update와 동일한 높이 */
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.profile-title:hover {
+  /* hover 효과 비활성화 */
+  transform: none;
+  box-shadow: none;
+  border-color: transparent;
 }
 .profile-line {
   text-align: center;
   border: 1px solid var(--color-primary);
   margin: 20px 0;
 }
+/* 프로필 업데이트용 공통 스타일 */
 .profile-update {
-  text-align: left;
-  padding: 9px;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  min-width: 120px;
+  height: 2.5rem; /* 통일된 높이 */
+  line-height: 1.5rem; /* 텍스트 수직 정렬 */
+  width: 100%; /* 전체 너비 사용 */
 }
+
+
+
+.profile-update:read-only {
+  background-color: var(--color-background-secondary);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.profile-update:read-only:hover {
+  transform: none;
+  border-color: var(--color-border);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 프로필 업데이트용 select 특별 스타일 (화살표 추가) */
+.profile-update-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  min-width: 120px;
+  height: 2.5rem; /* 통일된 높이 */
+  width: 100%; /* 전체 너비 사용 */
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f59e0b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+}
+
+
+
+/* React DatePicker 커스텀 스타일 */
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.react-datepicker__input-container input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-background) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--border-radius) !important;
+  padding: 0.5rem 2.5rem 0.5rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  color: var(--color-text-primary) !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+  box-shadow: var(--shadow-sm) !important;
+  min-width: 120px !important;
+  height: 2.5rem !important;
+  width: 100% !important;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f59e0b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/%3e%3c/svg%3e") !important;
+  background-position: right 0.5rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.25em 1.25em !important;
+}
+
+.react-datepicker__input-container input:hover {
+  border-color: var(--color-primary-light) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-1px) !important;
+}
+
+.react-datepicker__input-container input:focus {
+  outline: none !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15), var(--shadow-md) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* DatePicker 내부 select 요소들도 통일 */
+.react-datepicker__header select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.25rem 1.5rem 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f59e0b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.25rem center;
+  background-repeat: no-repeat;
+  background-size: 1em 1em;
+}
+
+.react-datepicker__header select:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
 .profile-setting-btn {
   padding: 8px 55px;
   background-color: var(--color-setting-btn);
   border-radius: 17px;
 }
+
 /* 채팅방 디자인*/
 .chat-box {
   margin: 70px auto;
@@ -1030,12 +1228,27 @@ button {
   }
 }
 
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-300px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.6s ease-out;
 }
 
 .animate-slide-in {
   animation: slideIn 0.6s ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInFromLeft 0.3s ease-out;
 }
 
 /* 포커스 링 제거 (Tailwind에서 관리) */
@@ -1131,4 +1344,135 @@ select:focus {
 * {
   transition: background-color 0.3s ease, border-color 0.3s ease,
     color 0.3s ease;
+}
+
+/* =================================================================
+   커스텀 Select 드롭다운 스타일
+   ================================================================= */
+
+/* 기본 select 스타일 초기화 및 커스텀 */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+}
+
+select:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1), var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+/* 프로필 업데이트용 select 특별 스타일 */
+.profile-update-dropdown {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: 0.5rem 2.5rem 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  min-width: 120px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23f59e0b' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25em 1.25em;
+}
+
+.profile-update-dropdown:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.profile-update-dropdown:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15), var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* select option 스타일링 */
+select option {
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  padding: 0.5rem;
+  border: none;
+}
+
+select option:hover {
+  background-color: var(--color-background-secondary);
+}
+
+select option:checked {
+  background-color: var(--color-primary);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+select option:disabled {
+  color: var(--color-text-muted);
+  background-color: var(--color-background-tertiary);
+  cursor: not-allowed;
+}
+
+/* 다크모드에서 select 화살표 색상 조정 */
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+.dark .profile-update-dropdown {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fbbf24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+}
+
+@media (prefers-color-scheme: dark) {
+  select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  }
+  
+  .profile-update-dropdown {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23fbbf24' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+  }
+}
+
+input.profile-update:hover,
+select.profile-update-dropdown:hover,
+.react-datepicker__input-container input:hover {
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+input.profile-update:focus,
+select.profile-update-dropdown:focus,
+.react-datepicker__input-container input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15), var(--shadow-md);
+  transform: translateY(-2px);
 }

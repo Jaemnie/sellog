@@ -27,11 +27,11 @@ export interface MyProfileInfo {
   email: string;
   phoneNumber: string;
   userAddress: string;
-  // score: number;
-  // postCount: number;
-  // productCount: number;
-  // followCount: number;
-  // followedCount: number;
+  score: number;
+  postCount: number;
+  productCount: number;
+  followCount: number;
+  followedCount: number;
 }
 // ============================
 // 인증 관련 타입
