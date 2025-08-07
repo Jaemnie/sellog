@@ -69,7 +69,7 @@ const Myprofile = () => {
     }
   };
   const handleSave = async () => {
-    const userId = sessionStorage.getItem("userId") ?? "";
+
     const hasKorean = /[ㄱ-하-ㅣ가-힣]/;
 
     if (hasKorean.test(myprofile?.nickname || "")) {

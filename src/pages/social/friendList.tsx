@@ -1,4 +1,4 @@
-import React from "react";
+
 
 // const FriendList = () => {
 //   return (
@@ -10,7 +10,7 @@ import React from "react";
 
 // export default FriendList;
 
-import { toast, ToastContainer, type ToastOptions } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const Toast = () => {

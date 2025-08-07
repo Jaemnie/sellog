@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 const ChatList = () => {
   const [selected, setselected] = useState<"left" | "right">("left");
   return (

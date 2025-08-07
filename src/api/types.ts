@@ -62,7 +62,7 @@ export interface ForgotPasswordRequest {
   id: string;
   email: string;
   password: string;
-  // passwordCk: string;
+  passwordCk: string;
 }
 
 //중복체크

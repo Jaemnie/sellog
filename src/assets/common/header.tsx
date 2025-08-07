@@ -12,7 +12,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isLoggedin, logout } = useAuth();
+  const { isLoggedin } = useAuth();
 
   const [navBar, setNavBar] = useState(false);
 

@@ -1,4 +1,4 @@
-import React from "react";
+
 import { FloatingButton } from "../../assets/common";
 
 const Home = () => {

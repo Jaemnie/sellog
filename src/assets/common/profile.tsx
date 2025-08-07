@@ -5,25 +5,21 @@ import { getMyProfile } from "../../api/profile";
 import type { MyProfileInfo } from "../../api/types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+
 import {
-  faLockOpen,
-  faUnlock,
   faGear,
 } from "@fortawesome/free-solid-svg-icons";
 const Profile = () => {
   const navigate = useNavigate();
   const [selected, setselected] = useState<"left" | "right">("left");
-  const [lock, unlock] = useState(false);
-  const userId = localStorage.getItem("userId");
+
+
 
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const goBack = () => {
-    navigate(-1);
-  };
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
