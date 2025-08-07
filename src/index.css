@@ -893,10 +893,9 @@ button {
 .profile-info {
   display: flex;
   max-height: 100px;
-  padding: 4px;
   justify-content: center;
   align-items: center;
-  margin-top: 15px;
+  margin-top: 70px;
 }
 .profile-img {
   height: 100px;
@@ -1006,6 +1005,10 @@ button {
     background-color: var(--color-background-secondary);
     border: 2px solid;
     border-color: var(--color-primary);
+  }
+  .profile-btn-left,
+  .profile-btn-right {
+    color: black;
   }
 }
 /* 프로필 업데이트용 공통 스타일 */

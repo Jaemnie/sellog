@@ -49,12 +49,12 @@ const Profile = () => {
   if (loading) {
     return (
       <div className="profile-box">
-        <div className="profile-header">
+        {/* <div className="profile-header">
           <button onClick={goBack}>
             <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
           </button>
           <div className="profile-header-text">로딩 중...</div>
-        </div>
+        </div> */}
         <div className="flex justify-center items-center h-64">
           <div>프로필을 불러오는 중...</div>
         </div>
@@ -65,12 +65,12 @@ const Profile = () => {
   if (error) {
     return (
       <div className="profile-box">
-        <div className="profile-header">
+        {/* <div className="profile-header">
           <button onClick={goBack}>
             <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
           </button>
           <div className="profile-header-text">오류</div>
-        </div>
+        </div> */}
         <div className="flex justify-center items-center h-64">
           <div className="text-red-500">{error}</div>
         </div>
@@ -80,7 +80,7 @@ const Profile = () => {
 
   return (
     <div className="profile-box">
-      <div className="profile-header">
+      {/* <div className="profile-header">
         <button onClick={goBack}>
           <FontAwesomeIcon icon={faArrowLeft} className="profile-icon" />
         </button>
@@ -91,7 +91,7 @@ const Profile = () => {
             icon={lock ? faUnlock : faLockOpen}
           />
         </button>
-      </div>
+      </div> */}
       <div className="profile-info">
         <img
           className="profile-img mr-4"
