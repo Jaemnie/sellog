@@ -33,6 +33,52 @@ export interface MyProfileInfo {
   followCount: number;
   followedCount: number;
 }
+
+// 상대 프로필 조회용 타입 (회원용)
+export interface UserProfileInfo {
+  profileThumbURL: string;
+  profileURL: string;
+  userId: string;
+  userName: string;
+  nickname: string;
+  gender: string;
+  profileMessage: string;
+  birthDay: string;
+  score: number;
+  postCount: number;
+  productCount: number;
+  followCount: number;
+  followedCount: number;
+}
+
+// ============================
+// 검색 관련 타입
+// ============================
+// 사용자 검색 요청
+export interface UserSearchRequest {
+  query: string;
+  page?: number;
+  limit?: number;
+}
+
+// 사용자 검색 결과 아이템
+export interface UserSearchResultItem {
+  userId: string;
+  userName: string;
+  nickname: string;
+  profileThumbURL: string;
+  profileMessage?: string;
+  score: number;
+}
+
+// 사용자 검색 결과
+export interface UserSearchResult {
+  users: UserSearchResultItem[];
+  totalCount: number;
+  currentPage: number;
+  totalPages: number;
+  hasNext: boolean;
+}
 // ============================
 // 인증 관련 타입
 // ============================
