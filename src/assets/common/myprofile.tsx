@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
@@ -23,9 +23,30 @@ const Myprofile = () => {
     { label: "여자", value: "FEMALE" },
     { label: "미공개", value: "NONE" },
   ]);
+
+  //프로필 이미지 변경
+  const [file, setfile] = useState<File | null>(null);
+  const [url, setUrl] = useState<string>("https://placehold.co/500x500.png");
+  const defaultUrl = "https://placehold.co/500x500.png";
+  const saveImg = url !== defaultUrl;
+  const inputRef = useRef<HTMLInputElement>(null);
+  const profileClick = () => {
+    inputRef.current?.click();
+  };
+  const profileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file);
+    if (file) {
+      const profileURL = URL.createObjectURL(file);
+      setUrl(profileURL);
+    }
+  };
   const goBack = () => {
     navigate(-1);
   };
+
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -47,6 +68,7 @@ const Myprofile = () => {
     fetchProfile();
   }, []);
 
+  //닉네임
   const notKo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/g, "");
     const valuelen = e.target.value;
@@ -68,8 +90,9 @@ const Myprofile = () => {
       });
     }
   };
-  const handleSave = async () => {
 
+  //저장버튼
+  const handleSave = async () => {
     const hasKorean = /[ㄱ-하-ㅣ가-힣]/;
 
     if (hasKorean.test(myprofile?.nickname || "")) {
@@ -86,6 +109,7 @@ const Myprofile = () => {
 
         if (response.isSuccess) {
           toast.success("프로필이 성공적으로 수정되었습니다!");
+          alert(myprofile?.profileURL);
         } else alert("프로필 수정을 할 수 없습니다.");
       } catch (err) {
         toast.error("프로필 수정 실패 :" + err);
@@ -105,18 +129,23 @@ const Myprofile = () => {
       {loading && <div>로딩 중...</div>}
       {error && <div>에러: {error}</div>}
       {!loading && !error && myprofile && (
-        <>
+        <div>
           <div className="profile-imgbox">
             <img
-              className="profile-img mb-4"
-              src={"https://placehold.co/500x500.png"}
+              className="profile-img mb-4 cursor-pointer border-4 border-transparent hover:border-current"
+              style={{ color: "var(--color-primary)" }}
+              //src={url || myprofile?.profileURL}
+              src={saveImg ? url : myprofile.profileURL || defaultUrl}
               alt="프로필 이미지"
+              onClick={profileClick}
             />
+            <input type="file" ref={inputRef} onChange={profileChange} hidden />
+            {/* <div className="absolute inset-0 group-hover:border-4"></div> */}
             <div className="flex">
-              <label className="cursor-pointer" htmlFor="profile-img">
+              {/* <label className="cursor-pointer" htmlFor="profile-img">
                 프로필 이미지 변경
               </label>
-              <input id="profile-img" type="file" className="hidden" />
+              <input id="profile-img" type="file" className="hidden" /> */}
               <button className="ml-2">프로필 제거</button>
             </div>
           </div>
@@ -153,7 +182,9 @@ const Myprofile = () => {
                   }
                 }}
               >
-                <option value="" disabled>성별을 선택하세요</option>
+                <option value="" disabled>
+                  성별을 선택하세요
+                </option>
                 {genderCk.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -178,7 +209,9 @@ const Myprofile = () => {
                 maxDate={new Date()}
                 value={myprofile.birthDay}
                 onChange={(birth: Date | null) => {
-                  const formatted = birth ? format(birth, "yyyy년 MM월 dd일") : "";
+                  const formatted = birth
+                    ? format(birth, "yyyy년 MM월 dd일")
+                    : "";
                   if (myprofile) {
                     setMyprofile({ ...myprofile, birthDay: formatted });
                   }
@@ -264,7 +297,7 @@ const Myprofile = () => {
               취소
             </button>
           </div>
-        </>
+        </div>
       )}
     </div>
   );

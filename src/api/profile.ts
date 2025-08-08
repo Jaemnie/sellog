@@ -36,3 +36,13 @@ export async function updateMyProfile(
   });
   return response;
 }
+//프로필 사진 변경
+export async function updateProfileImg(
+  userData: MyProfileInfo
+): Promise<ApiResponse<MyProfileInfo>> {
+  const response = await apiFetch<ApiResponse<MyProfileInfo>>(`/api/file`, {
+    method: "POST",
+    body: JSON.stringify(userData),
+  });
+  return response;
+}
