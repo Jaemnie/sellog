@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-import { getMyProfile, updateMyProfile } from "../../api/profile";
+import { getMyProfile, updateMyProfile, uploadFile } from "../../api/profile";
 import { type MyProfileInfo } from "../../api/types";
 import { toast } from "react-toastify";
 
@@ -25,22 +25,42 @@ const Myprofile = () => {
   ]);
 
   //프로필 이미지 변경
-  const [file, setfile] = useState<File | null>(null);
-  const [url, setUrl] = useState<string>("https://placehold.co/500x500.png");
-  const defaultUrl = "https://placehold.co/500x500.png";
-  const saveImg = url !== defaultUrl;
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>("");
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  
   const profileClick = () => {
     inputRef.current?.click();
   };
+  
   const profileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const formData = new FormData();
-    formData.append("file", file);
-    if (file) {
-      const profileURL = URL.createObjectURL(file);
-      setUrl(profileURL);
+    
+    // 파일 타입 검증
+    if (!file.type.startsWith('image/')) {
+      toast.error('이미지 파일만 업로드할 수 있습니다.');
+      return;
+    }
+    
+    // 파일 크기 검증 (300MB)
+    if (file.size > 300 * 1024 * 1024) {
+      toast.error('파일 크기는 300MB 이하여야 합니다.');
+      return;
+    }
+    
+    setSelectedFile(file);
+    const previewURL = URL.createObjectURL(file);
+    setPreviewUrl(previewURL);
+  };
+  
+  // 프로필 이미지 제거
+  const removeProfileImage = () => {
+    setSelectedFile(null);
+    setPreviewUrl("");
+    if (myprofile) {
+      setMyprofile({ ...myprofile, profileURL: "", profileThumbURL: "" });
     }
   };
   const goBack = () => {
@@ -102,18 +122,47 @@ const Myprofile = () => {
     if (myprofile?.phoneNumber && myprofile.phoneNumber.length !== 11) {
       toast.error("숫자로만 11자리 입력해주세요.");
       return;
-    } else {
-      try {
-        console.log(myprofile);
-        const response = await updateMyProfile(myprofile as MyProfileInfo);
-
-        if (response.isSuccess) {
-          toast.success("프로필이 성공적으로 수정되었습니다!");
-          alert(myprofile?.profileURL);
-        } else alert("프로필 수정을 할 수 없습니다.");
-      } catch (err) {
-        toast.error("프로필 수정 실패 :" + err);
+    }
+    
+    try {
+      let updatedProfile = { ...myprofile } as MyProfileInfo;
+      
+      // 새로운 이미지가 선택된 경우 먼저 업로드
+      if (selectedFile) {
+        setIsUploadingImage(true);
+        try {
+          const uploadResponse = await uploadFile(selectedFile, "PROFILE");
+          
+          if (uploadResponse.isSuccess && uploadResponse.payload) {
+            // 업로드된 이미지 URL을 프로필에 적용
+            updatedProfile.profileURL = uploadResponse.payload.originFileUrl;
+            updatedProfile.profileThumbURL = uploadResponse.payload.outFileUrl;
+          } else {
+            toast.error("이미지 업로드에 실패했습니다.");
+            return;
+          }
+        } catch (uploadError) {
+          toast.error("이미지 업로드 중 오류가 발생했습니다.");
+          return;
+        } finally {
+          setIsUploadingImage(false);
+        }
       }
+      
+      // 프로필 정보 업데이트
+      const response = await updateMyProfile(updatedProfile);
+
+      if (response.isSuccess) {
+        setMyprofile(updatedProfile); // 로컬 상태 업데이트
+        setSelectedFile(null); // 선택된 파일 초기화
+        setPreviewUrl(""); // 프리뷰 URL 초기화
+        toast.success("프로필이 성공적으로 수정되었습니다!");
+        navigate("/profile");
+      } else {
+        toast.error("프로필 수정을 할 수 없습니다.");
+      }
+    } catch (err) {
+      toast.error("프로필 수정 실패: " + err);
     }
   };
 
@@ -134,19 +183,24 @@ const Myprofile = () => {
             <img
               className="profile-img mb-4 cursor-pointer border-4 border-transparent hover:border-current"
               style={{ color: "var(--color-primary)" }}
-              //src={url || myprofile?.profileURL}
-              src={saveImg ? url : myprofile.profileURL || defaultUrl}
+              src={previewUrl || myprofile.profileURL || "https://placehold.co/500x500.png"}
               alt="프로필 이미지"
               onClick={profileClick}
             />
-            <input type="file" ref={inputRef} onChange={profileChange} hidden />
-            {/* <div className="absolute inset-0 group-hover:border-4"></div> */}
-            <div className="flex">
-              {/* <label className="cursor-pointer" htmlFor="profile-img">
-                프로필 이미지 변경
-              </label>
-              <input id="profile-img" type="file" className="hidden" /> */}
-              <button className="ml-2">프로필 제거</button>
+            <input 
+              type="file" 
+              ref={inputRef} 
+              onChange={profileChange} 
+              accept="image/*"
+              hidden 
+            />
+            <div className="flex justify-center -mt-1">
+              <button 
+                className="text-gray-500 hover:text-rose-400 transition-colors duration-200" 
+                onClick={removeProfileImage}
+              >
+                프로필 이미지 제거
+              </button>
             </div>
           </div>
           <div className="profile-myinfo">

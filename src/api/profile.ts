@@ -36,15 +36,25 @@ export async function updateMyProfile(
   });
   return response;
 }
-//프로필 사진 변경
-export async function updateProfileImg(
-  userData: MyProfileInfo
-): Promise<ApiResponse<MyProfileInfo>> {
-  const response = await apiFetch<ApiResponse<MyProfileInfo>>(`/api/file`, {
+// 파일 업로드 API
+export async function uploadFile(file: File, fileType: string = "PROFILE"): Promise<ApiResponse<{ originFileUrl: string; outFileUrl: string }>> {
+  const formData = new FormData();
+  formData.append("file", file);
+  
+  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/file?fileType=${fileType}`, {
     method: "POST",
-    body: JSON.stringify(userData),
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+    },
+    body: formData,
+    credentials: "include",
   });
-  return response;
+
+  if (!response.ok) {
+    throw new Error(`파일 업로드 실패: ${response.status}`);
+  }
+
+  return await response.json();
 }
 
 /**
