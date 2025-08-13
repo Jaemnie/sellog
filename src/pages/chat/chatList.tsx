@@ -3,7 +3,7 @@ const ChatList = () => {
   const [selected, setselected] = useState<"left" | "right">("left");
   return (
     <div>
-      <div className="chat-box">
+      <div className="box">
         <div className="flex">
           <button
             onClick={() => setselected("left")}

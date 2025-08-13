@@ -1,7 +1,7 @@
 // 프로필 관련 API 함수들
 import { apiFetch } from "./client";
 import type { ApiResponse, MyProfileInfo, UserProfileInfo } from "./types";
-
+import { getFeed } from "./feed";
 // ============================
 // 프로필 API 함수들
 // ============================
@@ -52,7 +52,9 @@ export async function updateProfileImg(
  * @param userId - 조회할 사용자 ID
  * @returns 상대방의 프로필 정보
  */
-export async function getUserProfile(userId: string): Promise<ApiResponse<UserProfileInfo>> {
+export async function getUserProfile(
+  userId: string
+): Promise<ApiResponse<UserProfileInfo>> {
   if (!userId) {
     throw new Error("사용자 ID가 필요합니다.");
   }

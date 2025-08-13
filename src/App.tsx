@@ -15,6 +15,8 @@ import ForgotPw from "./pages/auth/forgotPw";
 import Profile from "./assets/common/profile";
 import Myprofile from "./assets/common/myprofile";
 import Navigation from "./assets/common/navigation";
+import PostForm from "./assets/post/postForm";
+import SellForm from "./assets/post/sellForm";
 function App() {
   return (
     <div
@@ -75,6 +77,22 @@ function App() {
               element={
                 <RequireAuth>
                   <Myprofile />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/postfeed"
+              element={
+                <RequireAuth>
+                  <PostForm />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/sellfeed"
+              element={
+                <RequireAuth>
+                  <SellForm />
                 </RequireAuth>
               }
             />

@@ -34,6 +34,17 @@ export interface MyProfileInfo {
   followedCount: number;
 }
 
+// 게시글 조회
+export interface Feed {
+  title: string;
+  userId?: string;
+  contents: string;
+  thumbnail?: string;
+  tagNames?: string[];
+  place?: string;
+  price?: number;
+}
+
 // 상대 프로필 조회용 타입 (회원용)
 export interface UserProfileInfo {
   profileThumbURL: string;
