@@ -99,9 +99,20 @@ async function tryRefreshToken(): Promise<boolean> {
 
 async function refreshToken(): Promise<ApiResponse<AuthTokens>> {
   // refreshToken은 httpOnly 쿠키로 자동 전송됨
-  return apiFetch<ApiResponse<AuthTokens>>("/auth/refresh", {
+  // apiFetch를 사용하면 무한 루프가 발생하므로 직접 fetch 사용
+  const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include", // refreshToken 쿠키 자동 전송
   });
+
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+
+  return (await response.json()) as ApiResponse<AuthTokens>;
 }
 
 export function isAuthenticated(): boolean {
