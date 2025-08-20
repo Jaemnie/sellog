@@ -6,7 +6,8 @@ import { getFeed } from "../../api/feed";
 const feedForm = () => {
   const [feed, setFeed] = useState<Feed>({
     title: "",
-    userId: "",
+    type: "POST",
+    userId: sessionStorage.getItem("userId"),
     contents: "",
     thumbnail: "",
     place: "",
@@ -26,7 +27,7 @@ const feedForm = () => {
     }
   };
 
-  const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (feed) {
       setFeed({
@@ -47,7 +48,7 @@ const feedForm = () => {
       const response = await getFeed(feed as Feed);
       if (response.isSuccess) {
         toast.success("게시글이 업로드 되었습니다.");
-      } else alert("게시글을 업로드할 수 없습니다.");
+      } else alert(response.isSuccess);
     } catch (err) {
       toast.error("게시글 업로드 실패 :" + err);
     }
@@ -90,7 +91,7 @@ const feedForm = () => {
             className="feed-info"
             rows={5}
             placeholder="물건에 대해서 설명해주세요."
-            onChange={handleContentChange}
+            onChange={handleTextareaChange}
           />
         </div>
         <div className="feed-subtitle text-left">거래 희망 장소</div>

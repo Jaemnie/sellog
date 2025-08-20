@@ -1,10 +1,36 @@
 import { useState } from "react";
 
-import type { Feed } from "../../api/types";
+import { type Feed } from "../../api/types";
 
 const postForm = () => {
-  const [cost, setCost] = useState(0);
-
+  const [feed, setFeed] = useState<Feed>({
+    type: "POST",
+    title: "",
+    userId: sessionStorage.getItem("userId"),
+    contents: "",
+    thumbnail: "",
+    tagNames: [],
+    place: "",
+    price: 0,
+  });
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    if (feed) {
+      setFeed({
+        ...feed,
+        [name]: value,
+      });
+    }
+  };
+  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (feed) {
+      setFeed({
+        ...feed,
+        [name]: value,
+      });
+    }
+  };
   const handleSave = async () => {};
   return (
     <div className="box relative">
@@ -25,12 +51,13 @@ const postForm = () => {
             placeholder="나의 일상에 대해서 적어주세요."
           />
         </div>
-        <div className="feed-subtitle text-left">해시태그</div>
-        <span>#게시글</span>
-        <span>#소통</span>
-        <div className="feed-subtitle">사람 태그</div>
-        <div className="flex">
-          <div className="feed-subtitle mr-3">공개 대상</div>
+        <div className="feed-info-box">
+          <div className="feed-subtitle text-left mt-3">해시태그</div>
+          <textarea className="feed-info" placeholder="해시태그" />
+        </div>
+        <div className="feed-subtitle mt-3">사람 태그</div>
+        <div>
+          <div className="feed-subtitle mt-3 mr-3">공개 대상</div>
           <select name="공개 대상" className="!w-20 !p-1">
             <option value="all">전체</option>
             <option value="follower">팔로워</option>

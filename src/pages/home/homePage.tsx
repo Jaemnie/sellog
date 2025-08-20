@@ -1,18 +1,32 @@
+import React, { useEffect } from "react";
 import { faL } from "@fortawesome/free-solid-svg-icons";
 import { FloatingButton } from "../../assets/common";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { type Feed } from "../../api/types";
 const Home = () => {
   const navigate = useNavigate();
   const [btn, showBtn] = useState(false);
-  const [feed, showFeed] = useState(false);
+  const [feed, setFeed] = useState<Feed>({
+    title: "",
+    type: "POST",
+    userId: sessionStorage.getItem("userId"),
+    contents: "",
+    thumbnail: "",
+    place: "",
+    tagNames: [],
+    price: 0,
+  });
+  useEffect(() => {
+    console.log("useEffect");
+  });
   // 목업 데이터
   const mockPosts = [
     {
       id: 1,
       user: {
-        name: "민성",
+        name: "민성1",
         profileImage:
           "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
       },

@@ -36,8 +36,9 @@ export interface MyProfileInfo {
 
 // 게시글 조회
 export interface Feed {
+  type: "POST";
   title: string;
-  userId?: string;
+  userId: string;
   contents: string;
   thumbnail?: string;
   tagNames?: string[];
