@@ -47,10 +47,10 @@ const feedForm = () => {
     try {
       const response = await getFeed(feed as Feed);
       if (response.isSuccess) {
-        toast.success("게시글이 업로드 되었습니다.");
+        toast.success("판매 게시글이 업로드 되었습니다.");
       } else alert(response.isSuccess);
     } catch (err) {
-      toast.error("게시글 업로드 실패 :" + err);
+      toast.error("판매 게시글 업로드 실패 :" + err);
     }
   };
   return (
@@ -98,7 +98,7 @@ const feedForm = () => {
         <div className="text-left">위치 추가 - 클릭 시 지도 api</div>
       </div>
       <button className="feed-btn" type="submit" onClick={handleSave}>
-        작성 완료
+        업로드
       </button>
     </div>
   );
