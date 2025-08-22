@@ -2,8 +2,10 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { type Feed } from "../../api/types";
 import { getFeed } from "../../api/feed";
+import { useNavigate } from "react-router-dom";
 
 const feedForm = () => {
+  const navigate = useNavigate();
   const [feed, setFeed] = useState<Feed>({
     title: "",
     type: "POST",
@@ -37,18 +39,19 @@ const feedForm = () => {
 
   //저장버튼
   const handleSave = async () => {
-    if (feed.title == "") toast.error("글 제목을 입력해주세요.");
-    else if (feed.price == 0) toast.error("가격을 입력해주세요.");
-    else if (feed.contents == "") toast.error("물건 설명을 입력해주세요.");
-    console.log(feed);
-    alert(JSON.stringify(feed));
-    try {
-      const response = await getFeed(feed as Feed);
-      if (response.isSuccess) {
-        toast.success("판매 게시글이 업로드 되었습니다.");
-      } else alert(response.isSuccess);
-    } catch (err) {
-      toast.error("판매 게시글 업로드 실패 :" + err);
+    if (feed.title === "") toast.error("글 제목을 입력해주세요.");
+    else if (feed.price === 0) toast.error("가격을 입력해주세요.");
+    else if (feed.contents === "") toast.error("물건 설명을 입력해주세요.");
+    else {
+      try {
+        const response = await getFeed(feed as Feed);
+        if (response.isSuccess) {
+          toast.success("판매 게시글이 업로드 되었습니다.");
+          navigate("/home");
+        } else alert(response.isSuccess);
+      } catch (err) {
+        toast.error("판매 게시글 업로드 실패 :" + err);
+      }
     }
   };
   return (

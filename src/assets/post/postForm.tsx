@@ -13,19 +13,27 @@ const postForm = () => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
   const [tags, setTags] = useState<string[]>([]);
+
   useEffect(() => {
     if (inputRef.current) {
       const tagify = new Tagify(inputRef.current, {
         maxTags: 30,
-        placeholder: "태그를 입력하세요...",
+        transformTag: (tagData) => {
+          if (!tagData.value.startsWith("#")) {
+            tagData.value = "#" + tagData.value;
+          }
+          return tagData;
+        },
+        // placeholder: "태그를 입력하세요...",
       });
 
       tagify.on("change", (e) => {
-        console.log("현재 태그:", e.detail.value); // JSON 문자열
         const parsedTags = JSON.parse(e.detail.value).map(
           (tag: any) => tag.value
         );
+
         setFeed((prev) => ({ ...prev, tagNames: parsedTags }));
+        console.log(feed.tagNames);
       });
     }
     // setFeed((prev) => ({
@@ -64,16 +72,17 @@ const postForm = () => {
   };
 
   const handleSave = async () => {
-    if (feed.contents == "") toast.error("일상을 입력해주세요.");
-    try {
-      const response = await getFeed(feed as Feed);
-      if (response.isSuccess) {
-        console.log(feed.tagNames);
-        toast.success("피드가 업로드 되었습니다.");
-        navigate("/home");
-      } else alert(response.isSuccess);
-    } catch (err) {
-      toast.error("피드 업로드 실패 : " + err);
+    if (feed.contents === "") toast.error("일상을 입력해주세요.");
+    else {
+      try {
+        const response = await getFeed(feed as Feed);
+        if (response.isSuccess) {
+          toast.success("피드가 업로드 되었습니다.");
+          navigate("/home");
+        } else alert(response.isSuccess);
+      } catch (err) {
+        toast.error("피드 업로드 실패 : " + err);
+      }
     }
   };
   return (
