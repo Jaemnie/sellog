@@ -1,23 +1,22 @@
-import React, { useEffect } from "react";
-import { faL } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 import { FloatingButton } from "../../assets/common";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { type Feed } from "../../api/types";
+//import { type Feed } from "../../api/types";
 const Home = () => {
   const navigate = useNavigate();
   const [btn, showBtn] = useState(false);
-  const [feed, setFeed] = useState<Feed>({
-    title: "",
-    type: "POST",
-    userId: sessionStorage.getItem("userId"),
-    contents: "",
-    thumbnail: "",
-    place: "",
-    tagNames: [],
-    price: 0,
-  });
+  // const [feed, setFeed] = useState<Feed>({
+  //   title: "",
+  //   type: "POST",
+  //   userId: sessionStorage.getItem("userId"),
+  //   contents: "",
+  //   thumbnail: "",
+  //   place: "",
+  //   tagNames: [],
+  //   price: 0,
+  // });
   useEffect(() => {
     console.log("useEffect");
   });

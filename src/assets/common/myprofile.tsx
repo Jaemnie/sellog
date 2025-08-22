@@ -25,7 +25,6 @@ const Myprofile = () => {
   ]);
 
   //프로필 이미지 변경
-  const [file, setfile] = useState<File | null>(null);
   const [url, setUrl] = useState<string>("https://placehold.co/500x500.png");
   const defaultUrl = "https://placehold.co/500x500.png";
   const saveImg = url !== defaultUrl;

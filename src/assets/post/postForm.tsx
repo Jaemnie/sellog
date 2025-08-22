@@ -36,7 +36,7 @@ const postForm = () => {
   const [feed, setFeed] = useState<Feed>({
     type: "POST",
     title: "",
-    userId: sessionStorage.getItem("userId"),
+    userId: sessionStorage.getItem("userId")!,
     contents: "",
     thumbnail: "",
     tagNames: [],

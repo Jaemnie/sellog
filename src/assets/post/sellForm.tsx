@@ -7,15 +7,13 @@ const feedForm = () => {
   const [feed, setFeed] = useState<Feed>({
     title: "",
     type: "POST",
-    userId: sessionStorage.getItem("userId"),
+    userId: sessionStorage.getItem("userId")!,
     contents: "",
     thumbnail: "",
     place: "",
     tagNames: [],
     price: 0,
   });
-
-  const [cost, setCost] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

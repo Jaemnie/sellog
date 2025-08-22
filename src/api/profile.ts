@@ -1,7 +1,6 @@
 // 프로필 관련 API 함수들
 import { apiFetch } from "./client";
 import type { ApiResponse, MyProfileInfo, UserProfileInfo } from "./types";
-import { getFeed } from "./feed";
 // ============================
 // 프로필 API 함수들
 // ============================
