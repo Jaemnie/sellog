@@ -8,6 +8,7 @@ import type {
   FindIdRequest,
   ForgotPasswordRequest,
   DuplicateCheckRequest,
+  UserDeleteDto,
 } from "./types";
 
 // ============================
@@ -65,11 +66,11 @@ export async function findId(
   });
 }
 
-export async function forgotPassword(
+export async function changePassword(
   userData: ForgotPasswordRequest
 ): Promise<ApiResponse<void>> {
-  return apiFetch<ApiResponse<void>>("/auth/pwchange", {
-    method: "POST",
+  return apiFetch<ApiResponse<void>>("/auth/password", {
+    method: "PATCH",
     body: JSON.stringify(userData),
   });
 }
@@ -83,6 +84,43 @@ export async function checkDuplicate(
   });
 }
 
+export async function refreshToken(): Promise<ApiResponse<AuthTokens>> {
+  const response = await apiFetch<ApiResponse<AuthTokens>>("/auth/refresh", {
+    method: "POST",
+  });
+
+  // 토큰 재발급 성공 시 새 accessToken 저장
+  if (response.isSuccess && response.payload) {
+    sessionStorage.setItem("accessToken", response.payload.accessToken);
+    notifyAuthStateChange();
+  }
+
+  return response;
+}
+
+export async function deleteUser(
+  userData: UserDeleteDto
+): Promise<ApiResponse<void>> {
+  try {
+    const response = await apiFetch<ApiResponse<void>>("/auth/delete", {
+      method: "POST",
+      body: JSON.stringify(userData),
+    });
+
+    // 회원탈퇴 성공 시 토큰 제거
+    if (response.isSuccess) {
+      sessionStorage.removeItem("accessToken");
+      sessionStorage.removeItem("userId");
+      notifyAuthStateChange();
+    }
+
+    return response;
+  } catch (error) {
+    console.error("회원탈퇴 API 요청 실패:", error);
+    throw error;
+  }
+}
+
 export async function logout(): Promise<void> {
   try {
     await apiFetch("/auth/logout", {
@@ -94,6 +132,7 @@ export async function logout(): Promise<void> {
     // accessToken만 sessionStorage 제거
     // refreshToken은 서버에서 쿠키 삭제 처리
     sessionStorage.removeItem("accessToken");
+    sessionStorage.removeItem("userId");
     notifyAuthStateChange();
   }
 }

@@ -5,7 +5,15 @@ import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 
-import { forgotPassword, type ForgotPasswordRequest } from "../../api";
+import { changePassword, type ForgotPasswordRequest } from "../../api";
+
+// 컴포넌트 내부에서 사용할 UI 상태 인터페이스 (API와 분리)
+interface ForgotPasswordFormData {
+  userId: string; // API에서는 userId 필드 사용
+  email: string;
+  password: string;
+  passwordCk: string; // 확인용 필드 (API 전송 시 제외)
+}
 
 const ForgotPw: React.FC = () => {
   const navigate = useNavigate();
@@ -13,8 +21,8 @@ const ForgotPw: React.FC = () => {
   // 입력 상태 관리
   const [verificationCode, setVerificationCode] = useState("");
 
-  const [forgotPw, setforgotPw] = useState<ForgotPasswordRequest>({
-    id: "",
+  const [forgotPw, setforgotPw] = useState<ForgotPasswordFormData>({
+    userId: "",
     email: "",
     password: "",
     passwordCk: "",
@@ -100,7 +108,7 @@ const ForgotPw: React.FC = () => {
 
   // 이메일 인증 전송
   const handleSendVerification = () => {
-    if (!forgotPw?.id.trim()) {
+    if (!forgotPw?.userId.trim()) {
       notifyEmptyUserId();
       return;
     }
@@ -165,13 +173,12 @@ const ForgotPw: React.FC = () => {
 
     try {
       const forgotPasswordData: ForgotPasswordRequest = {
-        id: forgotPw?.id.trim(),
+        userId: forgotPw?.userId.trim(),
         email: forgotPw?.email.trim(),
         password: forgotPw?.password.trim(),
-        passwordCk: forgotPw?.passwordCk.trim(),
       };
 
-      const response = await forgotPassword(forgotPasswordData);
+      const response = await changePassword(forgotPasswordData);
 
       if (response.isSuccess) {
         notifyPasswordChangeSuccess();
@@ -198,11 +205,11 @@ const ForgotPw: React.FC = () => {
       <div className="card-logo">SelLog</div>
       <div className="card">
         <input
-          name="id"
+          name="userId"
           className="auth-input"
           type="text"
           placeholder="아이디"
-          value={forgotPw?.id}
+          value={forgotPw?.userId}
           onChange={handleChange}
           onKeyPress={(e) => e.key === "Enter" && handleSendVerification()}
         />

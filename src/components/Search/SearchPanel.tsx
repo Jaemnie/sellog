@@ -2,7 +2,6 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { 
   faMagnifyingGlass, 
-  faCircleXmark, 
   faTimes,
   faUser,
   faSpinner
@@ -40,10 +39,7 @@ const SearchPanel: React.FC<SearchPanelProps> = ({
     }
   };
 
-  const handleClearSearch = () => {
-    setSearchQuery('');
-    // 검색어를 지우면 결과도 초기화
-  };
+
 
   const handleUserClick = (user: UserProfileInfo) => {
     if (onUserSelect) {
@@ -105,7 +101,7 @@ const SearchPanel: React.FC<SearchPanelProps> = ({
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-3 pr-10 rounded-lg focus:outline-none transition-all duration-200 navigation-search-input"
+                className="w-full p-3 rounded-lg focus:outline-none transition-all duration-200 navigation-search-input"
                 style={{
                   backgroundColor: 'var(--color-background-secondary)',
                   border: '1px solid var(--color-border)',
@@ -114,23 +110,7 @@ const SearchPanel: React.FC<SearchPanelProps> = ({
                 placeholder="사용자 ID를 입력하세요..."
                 autoFocus
               />
-              {searchQuery && (
-                <button
-                  type="button"
-                  onClick={handleClearSearch}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 transition-colors duration-200"
-                  style={{ color: 'var(--color-text-muted)' }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.color = 'var(--color-text-primary)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.color = 'var(--color-text-muted)';
-                  }}
-                  aria-label="검색어 지우기"
-                >
-                  <FontAwesomeIcon icon={faCircleXmark} />
-                </button>
-              )}
+
             </form>
           </div>
 

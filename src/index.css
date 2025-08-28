@@ -581,6 +581,199 @@ button {
   padding: 1.5rem 1rem;
 }
 
+/* 피드 폼 개선된 스타일 */
+.bg-background {
+  background-color: var(--color-background);
+}
+
+.bg-background-secondary {
+  background-color: var(--color-background-secondary);
+}
+
+.text-text-primary {
+  color: var(--color-text-primary);
+}
+
+.text-text-secondary {
+  color: var(--color-text-secondary);
+}
+
+.text-text-muted {
+  color: var(--color-text-muted);
+}
+
+.border-border {
+  border-color: var(--color-border);
+}
+
+.border-border-secondary {
+  border-color: var(--color-border-secondary);
+}
+
+.bg-primary {
+  background-color: var(--color-primary);
+}
+
+.bg-primary-hover {
+  background-color: var(--color-primary-hover);
+}
+
+.text-primary-foreground {
+  color: var(--color-text-primary);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+/* 향상된 호버 및 포커스 효과 */
+.hover\:border-border-secondary:hover {
+  border-color: var(--color-border-secondary);
+}
+
+.hover\:bg-background:hover {
+  background-color: var(--color-background);
+}
+
+.hover\:bg-background-secondary:hover {
+  background-color: var(--color-background-secondary);
+}
+
+.hover\:bg-primary-hover:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* =================================================================
+   Tagify 커스텀 스타일 - 해시태그 입력
+   ================================================================= */
+
+/* Tagify 기본 컨테이너 스타일 재정의 */
+.tagify {
+  --tags-border-color: var(--color-border);
+  --tags-hover-border-color: var(--color-border-secondary);
+  --tags-focus-border-color: var(--color-primary);
+  --tag-bg: var(--color-primary);
+  --tag-hover: var(--color-primary-hover);
+  --tag-text-color: var(--color-text-primary);
+  --tag-text-color--edit: var(--color-text-primary);
+  --tag-pad: 0.5rem 0.75rem;
+  --tag-inset-shadow-size: 0;
+  --tag-invalid-color: #e74c3c;
+  --tag-invalid-bg: #fff5f5;
+  --tag-remove-bg: rgba(211, 47, 47, 1);
+  --tag-remove-btn-color: var(--color-text-primary);
+  --tag-remove-btn-bg: none;
+  --tag-remove-btn-bg--hover: #c53030;
+  --input-color: var(--color-text-primary);
+  --placeholder-color: var(--color-text-muted);
+  --placeholder-color-focus: var(--color-text-muted);
+  
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  background: var(--color-background);
+  transition: var(--transition);
+  min-height: 3.5rem;
+}
+
+.tagify:hover {
+  border-color: var(--color-border-secondary);
+  box-shadow: var(--shadow-md);
+}
+
+.tagify.tagify--focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1), var(--shadow-md);
+}
+
+/* 태그 스타일 */
+.tagify__tag {
+  background: var(--color-primary) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: 9999px !important;
+  margin: 0.125rem 0.25rem 0.125rem 0 !important;
+  padding: 0.375rem 0.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  border: none !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: var(--transition) !important;
+}
+
+.tagify__tag:hover {
+  background: var(--color-primary-hover) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+/* 태그 텍스트 */
+.tagify__tag-text {
+  color: var(--color-text-primary) !important;
+}
+
+/* 태그 제거 버튼 */
+.tagify__tag__removeBtn {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: var(--color-text-primary) !important;
+  border-radius: 50% !important;
+  margin-left: 0.5rem !important;
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.75rem !important;
+  transition: var(--transition) !important;
+}
+
+.tagify__tag__removeBtn:hover {
+  background: rgba(220, 38, 38, 0.9) !important;
+  transform: scale(1.1) !important;
+}
+
+/* 입력 필드 */
+.tagify__input {
+  color: var(--color-text-primary) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.5 !important;
+  margin: 0.125rem !important;
+  padding: 0.375rem 0 !important;
+  min-width: 8rem !important;
+}
+
+.tagify__input::before {
+  color: var(--color-text-muted) !important;
+  font-weight: normal !important;
+}
+
+/* 다크모드 지원 */
+@media (prefers-color-scheme: dark) {
+  .tagify {
+    --tag-bg: var(--color-primary);
+    --tag-hover: var(--color-primary-hover);
+    --tag-text-color: var(--color-text-primary);
+    --tag-remove-btn-color: var(--color-text-primary);
+    --input-color: var(--color-text-primary);
+    --placeholder-color: var(--color-text-muted);
+  }
+}
+
+/* 애니메이션 효과 */
+.tagify__tag {
+  animation: tagifyAppear 0.3s ease-out !important;
+}
+
+@keyframes tagifyAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 /* 포스트 카드 */
 .feed-post-card {
   margin-bottom: 1.5rem;
@@ -1353,16 +1546,114 @@ select:focus {
 .floating-button:hover svg {
   transform: rotate(90deg);
 }
-.floating-button-sell {
+
+/* 텍스트 플로팅 버튼 스타일 */
+.floating-text-button {
   position: fixed;
+  bottom: 24px;
+  right: 24px;
   display: flex;
-  flex-direction: column;
-  width: 80px;
-  background-color: red;
-  border: 1px solid;
-  border-color: #e5e7eb;
-  bottom: 88px;
-  right: 20px;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.625rem 1rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-hover) 100%
+  );
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  box-shadow: 0 3px 8px rgba(245, 158, 11, 0.3), 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 1000;
+  outline: none;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.floating-text-button:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(245, 158, 11, 0.5), 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.floating-text-button:active {
+  transform: translateY(0) scale(0.98);
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4), 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.floating-text-button:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* 플로팅 버튼 확장 애니메이션 */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+  }
+}
+
+.floating-submenu-enter {
+  animation: slideInUp 0.3s ease-out forwards;
+}
+
+.floating-submenu-exit {
+  animation: slideOutDown 0.2s ease-in forwards;
+}
+/* 플로팅 버튼 서브메뉴 개선된 스타일 */
+.floating-submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  padding: 0.5rem 0.75rem;
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.floating-submenu-item:hover {
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: scale(1.05);
+}
+
+.floating-submenu-icon {
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  transition: all 0.2s ease;
+}
+
+.floating-submenu-text {
+  color: var(--color-text-primary);
+  font-weight: 500;
+  font-size: 0.75rem;
 }
 /* 모바일에서의 크기 조정 */
 @media (max-width: 768px) {
@@ -1371,6 +1662,19 @@ select:focus {
     right: 20px;
     width: 52px;
     height: 52px;
+  }
+  
+  .floating-text-button {
+    bottom: 20px;
+    right: 20px;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.75rem;
+    gap: 0.25rem;
+  }
+  
+  /* 서브메뉴가 글쓰기 버튼에 가려지지 않도록 추가 여백 */
+  .floating-submenu-container {
+    margin-bottom: 4.5rem; /* 72px */
   }
 }
 
@@ -1386,6 +1690,24 @@ select:focus {
   .floating-button svg {
     width: 20px;
     height: 20px;
+  }
+  
+  .floating-text-button {
+    bottom: 16px;
+    right: 16px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.6875rem;
+    gap: 0.25rem;
+  }
+  
+  .floating-text-button svg {
+    width: 1rem;
+    height: 1rem;
+  }
+  
+  /* 서브메뉴가 글쓰기 버튼에 가려지지 않도록 추가 여백 */
+  .floating-submenu-container {
+    margin-bottom: 4rem; /* 64px */
   }
 }
 
