@@ -18,10 +18,10 @@ export interface RestResponseVoid {
 }
 
 // 공통 열거형
-export type PostType = 'POST' | 'PRODUCT';
-export type FileType = 'POST' | 'CHAT' | 'PROFILE';
-export type Gender = 'MALE' | 'FEMALE' | 'NONE';
-export type AccountVisibility = 'PUBLIC' | 'PRIVATE';
+export type PostType = "POST" | "PRODUCT";
+export type FileType = "POST" | "CHAT" | "PROFILE";
+export type Gender = "MALE" | "FEMALE" | "NONE";
+export type AccountVisibility = "PUBLIC" | "PRIVATE";
 
 // ============================
 // 커서 페이지네이션 타입
@@ -70,7 +70,9 @@ export interface UserPasswordDto {
 export interface CheckIdDto {
   userId: string;
 }
-
+export interface CheckEmailDto {
+  email: string;
+}
 export interface UserDeleteDto {
   userId: string;
   password: string;
@@ -289,7 +291,7 @@ export interface UserProfileInfo {
 }
 
 // ============================
-// API 응답 타입 정의 
+// API 응답 타입 정의
 // ============================
 
 // 게시글 응답 타입
@@ -364,3 +366,4 @@ export type LoginRequest = UserLoginDto;
 export type FindIdRequest = UserFindIdDto;
 export type ForgotPasswordRequest = UserPasswordDto;
 export type DuplicateCheckRequest = CheckIdDto;
+export type DuplicateEmailCheckRequest = CheckEmailDto;

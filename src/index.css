@@ -667,7 +667,7 @@ button {
   --input-color: var(--color-text-primary);
   --placeholder-color: var(--color-text-muted);
   --placeholder-color-focus: var(--color-text-muted);
-  
+
   border: 1px solid var(--color-border);
   border-radius: 0.75rem;
   padding: 1rem;
@@ -1628,14 +1628,16 @@ select:focus {
   border: 1px solid var(--color-border);
   border-radius: 9999px;
   padding: 0.5rem 0.75rem;
-  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 8px -2px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   white-space: nowrap;
 }
 
 .floating-submenu-item:hover {
-  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.15), 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 12px -3px rgba(0, 0, 0, 0.15),
+    0 4px 6px -1px rgba(0, 0, 0, 0.1);
   transform: scale(1.05);
 }
 
@@ -1663,7 +1665,7 @@ select:focus {
     width: 52px;
     height: 52px;
   }
-  
+
   .floating-text-button {
     bottom: 20px;
     right: 20px;
@@ -1671,7 +1673,7 @@ select:focus {
     font-size: 0.75rem;
     gap: 0.25rem;
   }
-  
+
   /* 서브메뉴가 글쓰기 버튼에 가려지지 않도록 추가 여백 */
   .floating-submenu-container {
     margin-bottom: 4.5rem; /* 72px */
@@ -1691,7 +1693,7 @@ select:focus {
     width: 20px;
     height: 20px;
   }
-  
+
   .floating-text-button {
     bottom: 16px;
     right: 16px;
@@ -1699,12 +1701,12 @@ select:focus {
     font-size: 0.6875rem;
     gap: 0.25rem;
   }
-  
+
   .floating-text-button svg {
     width: 1rem;
     height: 1rem;
   }
-  
+
   /* 서브메뉴가 글쓰기 버튼에 가려지지 않도록 추가 여백 */
   .floating-submenu-container {
     margin-bottom: 4rem; /* 64px */
