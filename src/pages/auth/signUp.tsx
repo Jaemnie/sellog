@@ -23,11 +23,6 @@ const SignUp: React.FC = () => {
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
 
-  // const handleUserIdChange = (value: string) => {
-  //   setUserId(value);
-  //   setIsDuplicateChecked(false);
-  // };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setsingup((prev) => ({
@@ -35,7 +30,10 @@ const SignUp: React.FC = () => {
       [name]: value,
     }));
 
-    setIsDuplicateChecked(false);
+    // 아이디가 변경될 때만 중복 검사 상태 초기화
+    if (name === 'userId') {
+      setIsDuplicateChecked(false);
+    }
   };
 
   const handleDuplicateCheck = async () => {
@@ -50,27 +48,47 @@ const SignUp: React.FC = () => {
     setIsCheckingDuplicate(true);
     try {
       const response = await checkDuplicate({ userId: signup.userId });
+      console.log("중복검사 응답:", response);
 
       if (response.isSuccess) {
-        setIsDuplicateChecked(true);
-        toast.success("사용 가능한 아이디입니다.", {
-          toastId: "duplicate-check-success",
-          autoClose: 2000,
-        });
+        // 서버가 payload 없이 isSuccess: true로 응답하면 사용 가능
+        if (response.payload?.available || !response.payload) {
+          setIsDuplicateChecked(true);
+          toast.success("사용 가능한 아이디입니다.", {
+            toastId: "duplicate-check-success",
+            autoClose: 2000,
+          });
+        } else {
+          // payload가 있고 available이 false인 경우
+          setIsDuplicateChecked(false);
+          toast.error("이미 사용 중인 아이디입니다.", {
+            toastId: "duplicate-check-fail",
+            autoClose: 2000,
+          });
+        }
       } else {
         setIsDuplicateChecked(false);
-        toast.error("이미 사용 중인 아이디입니다.", {
+        toast.error(response.message || "중복검사에 실패했습니다.", {
           toastId: "duplicate-check-fail",
           autoClose: 2000,
         });
       }
     } catch (error) {
       console.error("아이디 중복검사 오류:", error);
-      toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
-        toastId: "duplicate-check-error",
-        autoClose: 3000,
-      });
       setIsDuplicateChecked(false);
+      
+      // 409 에러 처리
+      if (error instanceof Error && error.message.includes('409')) {
+        toast.error("이미 사용 중인 아이디입니다.", {
+          toastId: "duplicate-check-conflict",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
+          toastId: "duplicate-check-error",
+          autoClose: 3000,
+        });
+      }
     } finally {
       setIsCheckingDuplicate(false);
     }
