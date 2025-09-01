@@ -8,6 +8,7 @@ import type {
   FindIdRequest,
   ForgotPasswordRequest,
   DuplicateCheckRequest,
+  DuplicateEmailCheckRequest,
   UserDeleteDto,
 } from "./types";
 
@@ -83,7 +84,14 @@ export async function checkDuplicate(
     body: JSON.stringify(userData),
   });
 }
-
+export async function checkEmailDuplicate(
+  userData: DuplicateEmailCheckRequest
+): Promise<ApiResponse<{ available: boolean }>> {
+  return apiFetch<ApiResponse<{ available: boolean }>>("/auth/email", {
+    method: "POST",
+    body: JSON.stringify(userData),
+  });
+}
 export async function refreshToken(): Promise<ApiResponse<AuthTokens>> {
   const response = await apiFetch<ApiResponse<AuthTokens>>("/auth/refresh", {
     method: "POST",
