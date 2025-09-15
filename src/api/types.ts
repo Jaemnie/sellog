@@ -101,6 +101,7 @@ export interface PostRequestDto {
   isPublic?: boolean;
 }
 
+
 export interface PostListParams extends CursorPageParams {
   type?: PostType;
 }
@@ -272,7 +273,26 @@ export interface MyProfileInfo {
   productCount: number;
   followCount: number;
   followedCount: number;
+  postLists:{
+    contents:[
+      postId:string,
+      title:string,
+      thumbnail:string,
+      createAt:string,
+    ],
+    hasNext:string,
+    nextGroupId:string,
+    nextCreateAt:string,
+    nextId:string,
+  };
 }
+// export interface PostContents {
+//   postId:string,
+//   title:string,
+//   thumbnail:string,
+//   createAt:string,
+// }
+
 
 export interface UserProfileInfo {
   profileThumbURL: string;

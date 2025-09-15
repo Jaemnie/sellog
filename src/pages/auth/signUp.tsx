@@ -28,8 +28,8 @@ const SignUp: React.FC = () => {
   const [isEmailCheckingDuplicate, setIsEmailCheckingDuplicate] =
     useState(false);
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
+  const [isEmailDuplicateChecked, setIsEmailDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
-
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -39,8 +39,11 @@ const SignUp: React.FC = () => {
     }));
 
     // 아이디가 변경될 때만 중복 검사 상태 초기화
-    if (name === 'userId') {
+    if (name === "userId") {
       setIsDuplicateChecked(false);
+    }
+    if (name === "email") {
+      setIsEmailDuplicateChecked(false);
     }
   };
 
@@ -84,9 +87,9 @@ const SignUp: React.FC = () => {
     } catch (error) {
       console.error("아이디 중복검사 오류:", error);
       setIsDuplicateChecked(false);
-      
+
       // 409 에러 처리
-      if (error instanceof Error && error.message.includes('409')) {
+      if (error instanceof Error && error.message.includes("409")) {
         toast.error("이미 사용 중인 아이디입니다.", {
           toastId: "duplicate-check-conflict",
           autoClose: 2000,
@@ -106,7 +109,7 @@ const SignUp: React.FC = () => {
   const handleEmailDuplicateCheck = async () => {
     if (!signup.email.trim()) {
       toast.error("이메일을 입력해주세요.", {
-        toastId: "signup-userid-error",
+        toastId: "signup-email-error",
         autoClose: 2000,
       });
       return;
@@ -118,22 +121,31 @@ const SignUp: React.FC = () => {
 
       if (response.isSuccess) {
         toast.success("사용 가능한 이메일입니다.", {
-          toastId: "duplicate-check-success",
+          toastId: "duplicate-email-check-success",
           autoClose: 2000,
         });
       } else {
         toast.error("이미 사용 중인 이메일입니다.", {
-          toastId: "duplicate-check-fail",
+          toastId: "duplicate-email-check-fail",
           autoClose: 2000,
         });
       }
     } catch (error) {
       console.error("이메일 중복검사 오류:", error);
-      toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
-        toastId: "duplicate-check-error",
-        autoClose: 3000,
-      });
+      setIsEmailDuplicateChecked(false);
 
+      //409 에러 처리
+      if (error instanceof Error && error.message.includes("409")) {
+        toast.error("이미 사용 중인 이메일입니다.", {
+          toastId: "duplicate-email-check-conflict",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
+          toastId: "duplicate-email-check-error",
+          autoClose: 3000,
+        });
+      }
     } finally {
       setIsEmailCheckingDuplicate(false);
     }
@@ -186,7 +198,7 @@ const SignUp: React.FC = () => {
       });
       return;
     }
-    // if (!isEmailDuplicatedChecked) {
+    // if (isEmailDuplicateChecked == false) {
     //   toast.info("이메일 중복검사를 해주세요.", {
     //     toastId: "signup-duplicate-check",
     //     autoClose: 2000,

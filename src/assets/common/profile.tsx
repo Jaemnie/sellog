@@ -2,18 +2,20 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getMyProfile } from "../../api/profile";
-import type { MyProfileInfo } from "../../api/types";
+import { type MyProfileInfo } from "../../api/types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
 import { faGear } from "@fortawesome/free-solid-svg-icons";
+
 const Profile = () => {
   const navigate = useNavigate();
   const [selected, setselected] = useState<"left" | "right">("left");
-
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+
+  // const [post,setPost]=useState<MyProfileInfo<post
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -48,6 +50,7 @@ const Profile = () => {
         </div> */}
         <div className="flex justify-center items-center h-64">
           <div>프로필을 불러오는 중...</div>
+          
         </div>
       </div>
     );
@@ -145,7 +148,27 @@ const Profile = () => {
         </div>
         <div className="profile-feed">
           {selected === "left" && <div>일상</div>}
-          {selected === "right" && <div>거래</div>}
+          {selected === "right" && (
+            // <div>거래</div>
+            <div>
+              {profileData?.productCount === 0 ? (
+                <div>아직 거래 게시물이 없습니다.</div>
+              ) : (
+                <div>
+                  {/* {sellposts.map((list)=>(
+                  <div key={list.postList}>
+                    
+                  </div>
+                ))} */}
+                {profileData?.postLists.contents.map((list)=>(
+                  <div key={list.title}>
+                    
+                    </div>
+                ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </div>
