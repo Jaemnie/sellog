@@ -156,7 +156,22 @@ export async function apiFetch<T>(
   };
 
   try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    const fullUrl = `${API_BASE_URL}${endpoint}`;
+    console.log("API Request:", {
+      url: fullUrl,
+      method: config.method || 'GET',
+      headers: config.headers,
+      hasToken: !!token
+    });
+    
+    const response = await fetch(fullUrl, config);
+    
+    console.log("API Response:", {
+      url: fullUrl,
+      status: response.status,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries())
+    });
 
     // 401 에러 시 토큰 재발급 시도
     if (response.status === 401) {
@@ -182,7 +197,9 @@ export async function apiFetch<T>(
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    return (await response.json()) as T;
+    const data = (await response.json()) as T;
+    console.log("API Response Data:", data);
+    return data;
   } catch (error) {
     console.error("API 요청 실패:", error);
     throw error;

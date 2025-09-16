@@ -273,12 +273,12 @@ export interface MyProfileInfo {
   productCount: number;
   followCount: number;
   followedCount: number;
-  postLists:{
-    contents:Content[],
-    hasNext:string,
-    nextGroupId:string,
-    nextCreateAt:string,
-    nextId:string,
+  postLists?:{
+    content:Content[],
+    hasNext:boolean,
+    nextGroupId:string | null,
+    nextCreateAt:string | null,
+    nextId:string | null,
   };
   
 }

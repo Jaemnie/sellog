@@ -10,14 +10,22 @@ import type {
 // ============================
 // 프로필 API 함수들
 // ============================
-export async function getMyProfile(): Promise<ApiResponse<MyProfileInfo>> {
+export async function getMyProfile(params?: UserProfileParams): Promise<ApiResponse<MyProfileInfo>> {
   const userId = sessionStorage.getItem("userId");
   if (!userId) {
     throw new Error("로그인이 필요합니다.");
   }
 
+  const searchParams = new URLSearchParams();
+  if (params?.type) searchParams.append("type", params.type);
+  if (params?.lastCreateAt) searchParams.append("lastCreateAt", params.lastCreateAt);
+  if (params?.lastId) searchParams.append("lastId", params.lastId);
+  if (params?.limit) searchParams.append("limit", params.limit.toString());
+
+  const url = `/api/profile/${userId}${searchParams.toString() ? `?${searchParams.toString()}` : ""}`;
+
   const response = await apiFetch<ApiResponse<MyProfileInfo>>(
-    `/api/profile/${userId}`,
+    url,
     {
       method: "GET",
     }
