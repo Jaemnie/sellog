@@ -13,10 +13,11 @@ const Profile = () => {
   const [profileData, setProfileData] = useState<MyProfileInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
-
+  
   // const [post,setPost]=useState<MyProfileInfo<post
 
+  
+  
   useEffect(() => {
     const fetchProfile = async () => {
       try {
@@ -34,11 +35,19 @@ const Profile = () => {
         setError("프로필을 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
+        // console.log("test"+profileData?.postLists.contents.map((list)=>(
+        //   <div key={list.title}>
+
+        //   </div>
+        // )
+        // ))
       }
     };
 
     fetchProfile();
   }, []);
+  
+    console.log(profileData?.postLists)
   if (loading) {
     return (
       <div className="profile-box">
@@ -160,11 +169,6 @@ const Profile = () => {
                     
                   </div>
                 ))} */}
-                {profileData?.postLists.contents.map((list)=>(
-                  <div key={list.title}>
-                    
-                    </div>
-                ))}
                 </div>
               )}
             </div>

@@ -274,18 +274,21 @@ export interface MyProfileInfo {
   followCount: number;
   followedCount: number;
   postLists:{
-    contents:[
-      postId:string,
-      title:string,
-      thumbnail:string,
-      createAt:string,
-    ],
+    contents:Content[],
     hasNext:string,
     nextGroupId:string,
     nextCreateAt:string,
     nextId:string,
   };
+  
 }
+export interface Content {
+  postId: string
+  title: string
+  thumbnail: string
+  createAt: string
+}
+
 // export interface PostContents {
 //   postId:string,
 //   title:string,
