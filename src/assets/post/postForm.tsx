@@ -112,7 +112,13 @@ const PostForm = () => {
 
   // 공개 설정 변경 핸들러
   const handleVisibilityChange = (isPublic: boolean) => {
-    setFeed(prev => ({ ...prev, isPublic }));
+    console.log("🔄 공개 설정 변경:", isPublic ? "전체 공개" : "팔로워만");
+    console.log("📊 변경 전 상태:", feed.isPublic);
+    setFeed(prev => {
+      const newFeed = { ...prev, isPublic };
+      console.log("✅ 변경 후 상태:", newFeed.isPublic);
+      return newFeed;
+    });
   };
 
   // 유효성 검사

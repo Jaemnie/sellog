@@ -8,8 +8,9 @@ import type {
   FindIdRequest,
   ForgotPasswordRequest,
   DuplicateCheckRequest,
-  DuplicateEmailCheckRequest,
   UserDeleteDto,
+  EmailVerificationSendRequest,
+  EmailVerificationVerifyRequest,
 } from "./types";
 
 // ============================
@@ -84,10 +85,23 @@ export async function checkDuplicate(
     body: JSON.stringify(userData),
   });
 }
-export async function checkEmailDuplicate(
-  userData: DuplicateEmailCheckRequest
-): Promise<ApiResponse<{ available: boolean }>> {
-  return apiFetch<ApiResponse<{ available: boolean }>>("/auth/email", {
+
+// ============================
+// 이메일 인증 API 함수들
+// ============================
+export async function sendEmailVerification(
+  userData: EmailVerificationSendRequest
+): Promise<ApiResponse<void>> {
+  return apiFetch<ApiResponse<void>>("/auth/register/send", {
+    method: "POST",
+    body: JSON.stringify(userData),
+  });
+}
+
+export async function verifyEmailOtp(
+  userData: EmailVerificationVerifyRequest
+): Promise<ApiResponse<void>> {
+  return apiFetch<ApiResponse<void>>("/auth/register/verify", {
     method: "POST",
     body: JSON.stringify(userData),
   });

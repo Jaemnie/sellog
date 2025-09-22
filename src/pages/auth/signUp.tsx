@@ -6,7 +6,8 @@ import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
 import {
   signUp,
   checkDuplicate,
-  checkEmailDuplicate,
+  sendEmailVerification,
+  verifyEmailOtp,
   type SignUpRequest,
 } from "../../api";
 
@@ -25,11 +26,16 @@ const SignUp: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPasswordCk, setShowPasswordCk] = useState(false);
   const [isCheckingDuplicate, setIsCheckingDuplicate] = useState(false);
-  const [isEmailCheckingDuplicate, setIsEmailCheckingDuplicate] =
-    useState(false);
   const [isDuplicateChecked, setIsDuplicateChecked] = useState(false);
-  const [isEmailDuplicateChecked, setIsEmailDuplicateChecked] = useState(false);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  
+  // 이메일 인증 관련 상태
+  const [otpCode, setOtpCode] = useState("");
+  const [isSendingOtp, setIsSendingOtp] = useState(false);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [isOtpSent, setIsOtpSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [otpTimer, setOtpTimer] = useState(0);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -43,7 +49,9 @@ const SignUp: React.FC = () => {
       setIsDuplicateChecked(false);
     }
     if (name === "email") {
-      setIsEmailDuplicateChecked(false);
+      setIsOtpSent(false);
+      setIsEmailVerified(false);
+      setOtpCode("");
     }
   };
 
@@ -106,49 +114,123 @@ const SignUp: React.FC = () => {
     console.log("중복검사 : " + isDuplicateChecked);
   };
 
-  const handleEmailDuplicateCheck = async () => {
-    if (!signup.email.trim()) {
-      toast.error("이메일을 입력해주세요.", {
-        toastId: "signup-email-error",
+
+  // 인증번호 발송
+  const handleSendOtp = async () => {
+    if (!signup.userId.trim()) {
+      toast.error("아이디를 먼저 입력해주세요.", {
+        toastId: "otp-userid-error",
         autoClose: 2000,
       });
       return;
     }
 
-    setIsEmailCheckingDuplicate(true);
+    if (!signup.email.trim()) {
+      toast.error("이메일을 입력해주세요.", {
+        toastId: "otp-email-error",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    setIsSendingOtp(true);
     try {
-      const response = await checkEmailDuplicate({ email: signup.email });
+      const response = await sendEmailVerification({
+        userId: signup.userId,
+        email: signup.email,
+      });
 
       if (response.isSuccess) {
-        toast.success("사용 가능한 이메일입니다.", {
-          toastId: "duplicate-email-check-success",
+        setIsOtpSent(true);
+        setOtpTimer(300); // 5분 타이머
+        toast.success("인증번호가 발송되었습니다.", {
+          toastId: "otp-send-success",
           autoClose: 2000,
         });
+        
+        // 타이머 시작
+        const interval = setInterval(() => {
+          setOtpTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(interval);
+              setIsOtpSent(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
       } else {
-        toast.error("이미 사용 중인 이메일입니다.", {
-          toastId: "duplicate-email-check-fail",
+        toast.error(response.message || "인증번호 발송에 실패했습니다.", {
+          toastId: "otp-send-fail",
           autoClose: 2000,
         });
       }
     } catch (error) {
-      console.error("이메일 중복검사 오류:", error);
-      setIsEmailDuplicateChecked(false);
-
-      //409 에러 처리
+      console.error("인증번호 발송 오류:", error);
+      
+      // 409 에러 처리 (이메일 중복)
       if (error instanceof Error && error.message.includes("409")) {
         toast.error("이미 사용 중인 이메일입니다.", {
-          toastId: "duplicate-email-check-conflict",
+          toastId: "email-duplicate-error",
           autoClose: 2000,
         });
       } else {
-        toast.error("중복검사 중 오류가 발생했습니다. 다시 시도해주세요.", {
-          toastId: "duplicate-email-check-error",
+        toast.error("인증번호 발송 중 오류가 발생했습니다.", {
+          toastId: "otp-send-error",
           autoClose: 3000,
         });
       }
     } finally {
-      setIsEmailCheckingDuplicate(false);
+      setIsSendingOtp(false);
     }
+  };
+
+  // 인증번호 확인
+  const handleVerifyOtp = async () => {
+    if (!otpCode.trim()) {
+      toast.error("인증번호를 입력해주세요.", {
+        toastId: "otp-code-error",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    setIsVerifyingOtp(true);
+    try {
+      const response = await verifyEmailOtp({
+        userId: signup.userId,
+        otp: otpCode,
+      });
+
+      if (response.isSuccess) {
+        setIsEmailVerified(true);
+        setOtpTimer(0);
+        toast.success("이메일 인증이 완료되었습니다.", {
+          toastId: "otp-verify-success",
+          autoClose: 2000,
+        });
+      } else {
+        toast.error(response.message || "인증번호가 올바르지 않습니다.", {
+          toastId: "otp-verify-fail",
+          autoClose: 2000,
+        });
+      }
+    } catch (error) {
+      console.error("인증번호 확인 오류:", error);
+      toast.error("인증번호 확인 중 오류가 발생했습니다.", {
+        toastId: "otp-verify-error",
+        autoClose: 3000,
+      });
+    } finally {
+      setIsVerifyingOtp(false);
+    }
+  };
+
+  // 타이머 포매팅
+  const formatTimer = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
   const handleSignUp = async () => {
     if (!signup?.name.trim()) {
@@ -198,14 +280,15 @@ const SignUp: React.FC = () => {
       });
       return;
     }
-    // if (isEmailDuplicateChecked == false) {
-    //   toast.info("이메일 중복검사를 해주세요.", {
-    //     toastId: "signup-duplicate-check",
-    //     autoClose: 2000,
-    //   });
-    //   return;
-    // }
-    if (isDuplicateChecked == false) {
+    if (!isEmailVerified) {
+      toast.info("이메일 인증을 완료해주세요.", {
+        toastId: "signup-email-verification",
+        autoClose: 2000,
+      });
+      return;
+    }
+
+    if (!isDuplicateChecked) {
       toast.info("아이디 중복검사를 해주세요.", {
         toastId: "signup-duplicate-check",
         autoClose: 2000,
@@ -330,22 +413,58 @@ const SignUp: React.FC = () => {
         <div className="relative">
           <input
             name="email"
-            className="auth-input mb-4"
+            className="auth-input"
             type="email"
             placeholder="이메일"
             value={signup?.email}
             onChange={handleChange}
-            onKeyPress={(e) => e.key === "Enter" && handleSignUp()}
+            onKeyPress={(e) => e.key === "Enter" && handleSendOtp()}
+            disabled={isEmailVerified}
           />
           <button
             className="btn-duplicate-check"
-            onClick={handleEmailDuplicateCheck}
-            disabled={isEmailCheckingDuplicate}
+            onClick={handleSendOtp}
+            disabled={isSendingOtp || isEmailVerified || (isOtpSent && otpTimer > 0)}
             type="button"
           >
-            {isEmailCheckingDuplicate ? "확인중..." : "중복검사"}
+            {isSendingOtp ? "발송중..." : isEmailVerified ? "인증완료" : isOtpSent && otpTimer > 0 ? `재발송 (${formatTimer(otpTimer)})` : "인증"}
           </button>
         </div>
+        
+        {/* 인증번호 입력 및 확인 */}
+        {isOtpSent && !isEmailVerified && (
+          <div className="relative mb-4">
+            <input
+              className="auth-input"
+              type="text"
+              placeholder="인증번호 입력"
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleVerifyOtp()}
+              maxLength={6}
+            />
+            <button
+              className="btn-duplicate-check"
+              onClick={handleVerifyOtp}
+              disabled={isVerifyingOtp}
+              type="button"
+            >
+              {isVerifyingOtp ? "확인중..." : "인증확인"}
+            </button>
+            {otpTimer > 0 && (
+              <div className="text-sm text-red-500 mt-1">
+                남은 시간: {formatTimer(otpTimer)}
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* 이메일 인증 완료 표시 */}
+        {isEmailVerified && (
+          <div className="w-full mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded-md">
+            ✓ 이메일 인증이 완료되었습니다.
+          </div>
+        )}
         <button
           className="btn-login btn"
           onClick={handleSignUp}

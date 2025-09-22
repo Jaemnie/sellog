@@ -70,9 +70,18 @@ export interface UserPasswordDto {
 export interface CheckIdDto {
   userId: string;
 }
-export interface CheckEmailDto {
+
+// 이메일 인증 관련 타입
+export interface EmailVerificationSendRequest {
+  userId: string;
   email: string;
 }
+
+export interface EmailVerificationVerifyRequest {
+  userId: string;
+  otp: string;
+}
+
 export interface UserDeleteDto {
   userId: string;
   password: string;
@@ -389,4 +398,3 @@ export type LoginRequest = UserLoginDto;
 export type FindIdRequest = UserFindIdDto;
 export type ForgotPasswordRequest = UserPasswordDto;
 export type DuplicateCheckRequest = CheckIdDto;
-export type DuplicateEmailCheckRequest = CheckEmailDto;

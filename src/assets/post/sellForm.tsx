@@ -70,7 +70,13 @@ const SellForm = () => {
 
   // 공개 설정 변경 핸들러
   const handleVisibilityChange = (isPublic: boolean) => {
-    setFeed(prev => ({ ...prev, isPublic }));
+    console.log("🔄 [판매글] 공개 설정 변경:", isPublic ? "전체 공개" : "팔로워만");
+    console.log("📊 변경 전 상태:", feed.isPublic);
+    setFeed(prev => {
+      const newFeed = { ...prev, isPublic };
+      console.log("✅ 변경 후 상태:", newFeed.isPublic);
+      return newFeed;
+    });
   };
 
   // 가격 포맷팅
@@ -136,6 +142,9 @@ const SellForm = () => {
       previewUrls.forEach(url => URL.revokeObjectURL(url));
     };
   }, [previewUrls]);
+
+  // 디버깅: 현재 상태 확인
+  console.log("📋 [판매글] 현재 isPublic 상태:", feed.isPublic);
 
   return (
     <div className="min-h-screen bg-background pt-20 pb-8">
